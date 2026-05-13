@@ -1,0 +1,15 @@
+<odoo>
+    <menuitem id="event_management_root" name="Event management">
+        <menuitem id="estate_first_level_menu" name="First level">
+            
+        </menuitem>
+"
+    </menuitem>
+
+
+<!--        <menuitem id="event_sale_order"-->
+<!--                  name="quotations"-->
+<!--                  action="event_quotation"-->
+<!--                  parent="event_management_root"/>-->
+
+</odoo>

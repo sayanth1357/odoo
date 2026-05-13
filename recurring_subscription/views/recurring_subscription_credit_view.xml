@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+       <record id="recurring_sub_credit_action" model="ir.actions.act_window">
+        <field name="name">Recurring subscription credit</field>
+        <field name="res_model">recurring.subscription.credit</field>
+        <field name="view_mode">list,form</field>
+       </record>
+
+
+
+       <record id="rec_sub_credit_view1" model="ir.ui.view">
+           <field name="name">recurring.subscription.credit</field>
+           <field name="model">recurring.subscription.credit</field>
+           <field name="arch" type="xml">
+               <list string="l1">
+                   <field name="recurring_subscription_id"/>
+                   <field name="partner_id"/>
+                   <field name="credit_amount"/>
+                   <field name="date_begin"/>
+                   <field name="date_end"/>
+               </list>
+           </field>
+       </record>
+
+
+        <record id="recurring_sub_cred_view_form" model="ir.ui.view">
+           <field name="name">recurring.subscription.credit</field>
+           <field name="model">recurring.subscription.credit</field>
+           <field name="arch" type="xml">
+                <form string="credit">
+                    <field name="state" widget="statusbar" options="{'clickable':'1'}"
+                           statusbar_visible="pending,confirmed,first approved,fully approved,rejected"/>
+                    <sheet>
+                        <group>
+                            <field name="recurring_subscription_id"/>
+                            <field name="partner_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id"/>
+                            <field name="credit_amount"/>
+                            <field name="id_establishment"/>
+<!--                            <field name="billing_schedule_id"/>-->
+                            <field name="due_date"/>
+<!--                            <field name="state"/>-->
+<!--                            <field name="start_date" widget="daterange"/>-->
+<!--                            <field name="end_date" widget="daterange"/>-->
+                            <field name="date_begin"  widget="daterange" options="{'end_date_field': 'date_end'}"/>
+                            <field name="date_end" invisible="1"/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+           </field>
+        </record>
+
+</odoo>

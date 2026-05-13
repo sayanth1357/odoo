@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+         <record id="demo_recurring_sub1" model="product.template">
+             <field name="name">Youtube subscription</field>
+             <field name="default_code">SubscriptionCredit</field>
+             <field name="type">service</field>
+         </record>
+          <record id="demo_recurring_sub2" model="product.template">
+             <field name="name">jio hotstar subscription</field>
+             <field name="default_code">SubscriptionCredit 1</field>
+             <field name="type">service</field>
+         </record>
+    </data>
+
+</odoo>
