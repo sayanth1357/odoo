@@ -30,11 +30,14 @@
 <!--                <field name="status" widget="statusbar"  statusbar_visible="draft,confirm,done,cancel"/>-->
                 <header>
                        <field name="status" widget="statusbar"  statusbar_visible="draft,confirm,done" readonly="1"/>
-                        <button  type="object" string="Confirm" name="confirm_btn" class="btn-primary"
-                                 invisible="status in['confirm','cancel'] " />
-                        <button type="object" string="cancel" name="cancel_btn"
+                        <button  type="object" string="Confirm" name="action_confirm_btn" class="btn-primary"
+                                 invisible="status in['confirm','cancel','done'] " />
+                        <button type="object" string="cancel" name="action_cancel_btn"
                                 invisible="status not in ['draft', 'confirm', 'done'] or not id "/>
+                        <button type="object" string="Done" name="action_done_btn"
+                                invisible="status not in ['draft', 'confirm','cancel'] or not id "/>
                 </header>
+
                 <sheet>
                     <h1>
                         <field name="id_order"/>

@@ -25,6 +25,9 @@
       <field name="model">billing.schedule</field>
       <field name="arch" type="xml">
           <form string="billing">
+               <header>
+                        <button  type="object" string="Create invoice" name="action_create_inv" class="btn-primary"/>
+                </header>
               <sheet>
                   <div class="oe_button_box" name="button_box">
                       <button name="action_rec_sub"
@@ -34,6 +37,13 @@
                           <field name="recurring_subscription_ids"
                                  widget="statinfo"
                                  string="subscription"/>
+                      </button>
+
+                      <button name="action_rec_sub_invoice"
+                              type="object"
+                              class="oe_stat_button">
+                          <field string="invoices " name="invoice_count" widget="statinfo"/>
+
                       </button>
                   </div>
 
@@ -55,6 +65,7 @@
                       </page>
                   </notebook>
               </sheet>
+              <chatter/>
           </form>
       </field>
   </record>

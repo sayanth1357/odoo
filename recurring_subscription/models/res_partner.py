@@ -23,13 +23,7 @@ class ResPartner(models.Model):
 
     @api.model_create_multi
     def create(self,vals):
-        print(vals)
-        print(1234)
-
         partner = super(ResPartner,self).create(vals)
-        print(partner)
-        print(23454)
-
         letters = ''.join(random.choices(string.ascii_uppercase, k=3))
         digit = ''.join(random.choices(string.digits, k=3))
         special = ''.join(random.choices('@#$%^&*', k=2))
@@ -41,12 +35,5 @@ class ResPartner(models.Model):
         partner.write({
             'account_id': account.id
         })
-
-        print(self)
-        print(account.id_account)
-
-        # self.account_id=account.id_account
-        print(self.account_id)
-        print(123,self.account_id)
         return partner
 

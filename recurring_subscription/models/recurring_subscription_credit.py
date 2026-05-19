@@ -10,9 +10,8 @@ class RecurringSubscriptionCredit(models.Model):
     _description = "Recurring Subscription Credit"
     _inherit = ['mail.thread','mail.activity.mixin']
 
-    # recurring_subscription=fields.Char(string="recurring subscription")
     recurring_subscription_id=fields.Many2one('recurring.subscription',string="recurring subscription",
-                                               tracking=True,required=True  )
+                                               tracking=True )
     partner_id=fields.Many2one('res.partner',string="partner" ,
                                related="recurring_subscription_id.customer_id")
 
@@ -34,14 +33,10 @@ class RecurringSubscriptionCredit(models.Model):
     # end_date=fields.Date(string="End date")
     date_begin = fields.Date(string='period date', required=True, tracking=True)
     date_end = fields.Date(string='End Date', required=True, tracking=True)
-    # billing_schedule_id=fields.Many2one('recurring.subscription.credit',string='billing')
 
-
-    print(date_end)
     @api.onchange('credit_amount')
     def _onchange_credit_amount(self):
         for record in self:
-            print(self)
             if record.recurring_subscription_id:
                 if record.credit_amount==0 or record.credit_amount > record.recurring_subscription_id.recurring_amount:
                     record.recurring_subscription_id=False

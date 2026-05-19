@@ -7,3 +7,4 @@ from . import product_order_lines
 from . import partner_account_id
 from . import res_partner
 from . import crm_lead
+from . import account_move

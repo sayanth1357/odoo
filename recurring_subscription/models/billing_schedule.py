@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
-from email.policy import default
 
 from odoo import fields,models,api
-from odoo.orm.decorators import onchange
-
-
 class BillingSchedule(models.Model):
     _name = 'billing.schedule'
     _description = 'Billing schedule'
     _rec_name = 'billing_name'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
 
     simulation_boolean=fields.Boolean(string="Simulation")
-    # start_date = fields.Date(string="Start date")
-    # end_date = fields.Date(string="End date")
-    billing_name=fields.Char(string='Name')
+    billing_name=fields.Char(string='Name',tracking=True)
     billing=fields.Char(string='billing')
     date_begin = fields.Date(string='period', required=True, tracking=True)
     date_end = fields.Date(string='End Date', required=True, tracking=True)
@@ -26,8 +22,9 @@ class BillingSchedule(models.Model):
     currency_id = fields.Many2one("res.currency", string="currency", related='company_id.currency_id',
                                   default=lambda self: self.env.user.company_id.currency_id.id)
     total_credit_amount=fields.Monetary(string="Total credit amount" ,default=1,compute='_compute_total_credit_amount')
-    credits_ids=fields.One2many('recurring.subscription.credit','recurring_subscription_id'
-                                ,string='Credits',compute='_compute_credits_ids')
+    credits_ids=fields.Many2many('recurring.subscription.credit',string='Credits')
+    invoice_count = fields.Integer(compute="_compute_invoice_count", string='invoice count')
+
 
     def action_rec_sub(self):
         self.ensure_one()
@@ -39,6 +36,16 @@ class BillingSchedule(models.Model):
             "domain": [('id','in',self.recurring_subscription_ids.ids)]
         }
 
+    def action_rec_sub_invoice(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "account.move",
+            "name": "billing.schedule",
+            "views": [[False, "list"], [False, "form"]],
+            "domain": [('id', 'in', self.credits_ids.ids)]
+        }
+
     @api.depends('recurring_subscription_ids')
     def _compute_total_credit_amount(self):
         sum = 0
@@ -46,47 +53,80 @@ class BillingSchedule(models.Model):
             for rec in record.recurring_subscription_ids:
                 if rec.status == 'confirm':
                     for line in rec.recurring_subscription_credit_ids:
-                        sum += line.credit_amount
+                        if line.state=='fully approved':
+                            sum += line.credit_amount
             record.total_credit_amount = sum
-
-
 
 
 
     @api.depends('recurring_subscription_ids')
     def _compute_credits_ids(self):
         for record in self:
-                print(record)
                 credits=record.recurring_subscription_ids.mapped('recurring_subscription_credit_ids')
-                print(credits)
                 self.update({
                     'credits_ids': [(fields.Command.set(credits.ids))]
                 })
 
-    # @api.onchange('recurring_subscription_ids')
-    # def _onchange_recurring_subscription_ids(self):
-    #     if self.recurring_subscription_ids:
-    #         credits=self.env['recurring.subscription'].search(['recurring_subscription_credit_ids','in',self.ids])
-    #         print(credits)
-    #         self.update({
-    #             'credits_ids': [(fields.Command.set(credits.ids))]
-    #         })
-        # for record in self:
-        #         print(123,record.recurring_subscription_ids)
-        #         credits=record.recurring_subscription_ids.mapped('recurring_subscription_credit_ids')
-        #         print(record.credits_ids)
-        #         record.update({
-        #                 'credits_ids': [(fields.Command.set(credits.ids))]
-        #             })
-
-    # @api.onchange('recurring_subscription_ids')
-    # def _onchange_recurring_subscription_ids(self):
-    #     for record in self:
-    #         if record.recurring_subscription_ids:
-    #             credits=record.recurring_subscription_ids.mapped('recurring_subscription_credit_ids')
-    #             self.update({
-    #                 'credits_ids':credits.ids
-    #             })
-    #
 
 
+    @api.onchange('recurring_subscription_ids')
+    def _onchange_recurring_subscription_ids(self):
+            credits=self.env['recurring.subscription.credit'].search([
+                ('state','=','fully approved'),
+                ('recurring_subscription_id','in',self.recurring_subscription_ids.ids)
+            ])
+            self.customer_id=self.recurring_subscription_ids.mapped('customer_id')
+            self.update({
+                            'credits_ids': [(fields.Command.set(credits.ids))]
+                        })
+
+    def action_create_inv(self):
+        for record in self:
+            for rec in record.recurring_subscription_ids:
+                credit=self.env['recurring.subscription.credit'].search([('recurring_subscription_id','=',rec.id),
+                                                                         ('credit_amount','<=',rec.recurring_amount)],limit=1)
+                print(credit)
+
+                invoice_line_ids=[(0,0,{
+                    'name':rec.name,
+                    'quantity':1,
+                    'price_unit':rec.recurring_amount,
+                })]
+
+                if credit:
+                    invoice_line_ids.append((0,0,{
+                        'name':credit,
+                        'quantity':1,
+                        'price_unit':-credit.credit_amount,
+                    }))
+                print(invoice_line_ids)
+                invoice=self.env['account.move'].create({
+                    'move_type':'out_invoice',
+                    'partner_id': rec.customer_id.id,
+                    'invoice_line_ids':invoice_line_ids
+                    })
+                return{
+                    'name':'invoice',
+                    'type':'ir.actions.act_window',
+                    'res_model':'account.move',
+                    'view_mode':'form',
+                    'view_type':'form',
+                    'target':'current',
+                    'res_id':invoice.id,
+                }
+
+
+    @api.depends('credits_ids')
+    def _compute_invoice_count(self):
+        for move in self:
+            move.invoice_count = len(move.recurring_subscription_ids)
+
+       # invoice = self.env['account.move'].create({
+       #     'move_type': 'out_invoice',
+       #     'partner_id': self.customer_id.id,
+       #     'invoice_line_ids': [(0, 0, {
+       #         'name': 'product id',
+       #         'quantity': 1,
+       #         'price_unit': self.recurring_subscription_ids.recurring_amount,
+       #     })],
+       # })

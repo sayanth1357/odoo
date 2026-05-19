@@ -31,7 +31,7 @@ class RecurringSubscription(models.Model):
                             default='draft',tracking=True,readonly=True)
     customer_id=fields.Many2one("res.partner",string="Customer" ,copy=False,required=True)
     product_id=fields.Many2one("product.template",string="Product" ,required=True)
-    terms_and_condition=fields.Html()
+    terms_and_condition=fields.Html(string='Terms and condition')
     count=fields.Integer(string="count",compute="_compute_count")
 
     recurring_subscription_credit_ids=fields.One2many("recurring.subscription.credit",
@@ -50,16 +50,38 @@ class RecurringSubscription(models.Model):
         print(res)
         return res
 
-    def confirm_btn(self):
+    def action_confirm_btn(self):
         self.write({
             'status':'confirm'
         })
 
-    def cancel_btn(self):
+    def action_cancel_btn(self):
         self.write({
             'status':'cancel'
         })
 
+    def action_done_btn(self):
+        # self.write({
+        #     'status':'done'
+        # })
+        template = self.env.ref('recurring_subscription.mail_template_recurring_subscription')
+        print(876,template)
+        email_values = {
+            'email_from': self.env.user.email,
+            'email_to': self.customer_id.email,
+        }
+
+        print(123,email_values)
+        if template:
+            template.send_mail(self.id, force_send=True, email_values=email_values)
+            self.message_post_with_source(
+                template,
+                subtype_xmlid='mail.mt_comment',
+            )
+            print(321)
+            self.write({
+                   'status':'done'
+            })
 
     @api.constrains('id_establishment')
     def _check_id_establishment(self):
@@ -73,10 +95,6 @@ class RecurringSubscription(models.Model):
     @api.depends('recurring_subscription_credit_ids.date_end','due_date')
     def _compute_recurring_subscription_credit_ids(self):
         for record in self:
-
-            # for record in self.recurring_subscription_credit_ids:
-            #     print(type(record.date_end))
-
             credits = record.recurring_subscription_credit_ids.filtered(lambda rec:
                                                                         rec.date_end < rec.due_date)
             self.update({
@@ -99,14 +117,8 @@ class RecurringSubscription(models.Model):
     def _onchange_id_establishment(self):
         for record in self:
             if record.id_establishment:
-                print(record.id_establishment)
                 partner=self.env['res.partner'].search([('id_establishment','=',record.id_establishment)],limit=1)
-                print(partner)
                 if partner:
                     record.customer_id=partner
-                    print(record.customer_id)
                 else:
                     raise ValidationError('no partner found')
-
-
-
