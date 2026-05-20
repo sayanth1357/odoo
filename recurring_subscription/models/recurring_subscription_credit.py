@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from typing import Self
 
 from odoo import fields,models,api
 from datetime import timedelta,date
+
+from odoo.orm.types import ValuesType
 
 
 class RecurringSubscriptionCredit(models.Model):
@@ -33,6 +36,9 @@ class RecurringSubscriptionCredit(models.Model):
     # end_date=fields.Date(string="End date")
     date_begin = fields.Date(string='period date', required=True, tracking=True)
     date_end = fields.Date(string='End Date', required=True, tracking=True)
+    product_ids=fields.Many2many('product.product',string='product')
+    # recurring_subscription_res=fields.Char(string='rec')
+
 
     @api.onchange('credit_amount')
     def _onchange_credit_amount(self):
@@ -40,3 +46,14 @@ class RecurringSubscriptionCredit(models.Model):
             if record.recurring_subscription_id:
                 if record.credit_amount==0 or record.credit_amount > record.recurring_subscription_id.recurring_amount:
                     record.recurring_subscription_id=False
+    #
+    # @api.model_create_multi
+    # def create(self, vals_list):
+    #     for vals in vals_list:
+    #         res=self.env['product.product'].create({
+    #             'name':vals.get('recurring_subscription_id'),
+    #             'list_price':vals.get('credit_amount'),
+    #         })
+    #         vals['recurring_subscription_res']=res.id
+    #         print( vals['recurring_subscription_res'])
+    #     return super().create(vals_list)

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="cron_create_daily_invoice" model="ir.cron">
+            <field name="name">Daily create invoice</field>
+            <field name="model_id" ref="recurring_subscription.model_billing_schedule"/>
+            <field name="state">code</field>
+            <field name="code">model._create_daily_invoice()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

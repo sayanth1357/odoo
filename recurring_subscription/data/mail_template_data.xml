@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+
     <data>
         <!--Template to send demo mail template for the customer-->
         <record id="mail_template_recurring_subscription" model="mail.template">
@@ -9,26 +10,35 @@
             <field name="email_to">${{object.customer_id.id}}</field>
             <field name="subject">Recurring subscription done</field>
             <field name="body_html" type="html">
-                <div style="margin: 0px; padding: 0px;">
-                    <div style="justify-content: center;background-color: #714B67; padding:0.6rem;padding-left: 35px;text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;width:40%">
-                        <h2>
-                            Hi,
-                            <t t-out="object.customer_id.name"/>
-                        </h2>
-                        <div>
-                            <h3>
-                                This is the mail send to you for informing subscription is done.
-                            </h3>
-                        </div>
-                    </div>
-                    <br/>
-                    <br/>
-                    Regards,
-                    <br/>
-                    <t t-out="object.company_id.name"/>
-                    <br/>
+                <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+                          <p>Dear
+                            <strong>
+                                <t t-out="object.customer_id.name"/>
+                            </strong>,
+                          </p>
+                           <p>
+                                 We are pleased to inform you that your subscription is done.
+                           </p>
+                         <p style="margin-top: 20px;">
+                            <strong>Product:</strong>
+                            <t t-out="object.product_id.name"/>
+                        </p>
+                        <p style="margin-top: 20px;">
+                            <strong>Total Amount:</strong>
+                            <t t-out="object.recurring_amount"/>
+                        </p>
+
+                        <p>Best Regards,</p>
+                        <p>
+                            <strong>
+                                <t t-out="object.company_id.name"/>
+                            </strong>
+                        </p>
+
+
                 </div>
             </field>
         </record>
     </data>
+
 </odoo>

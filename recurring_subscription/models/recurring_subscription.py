@@ -79,9 +79,9 @@ class RecurringSubscription(models.Model):
                 subtype_xmlid='mail.mt_comment',
             )
             print(321)
-            self.write({
+        self.write({
                    'status':'done'
-            })
+        })
 
     @api.constrains('id_establishment')
     def _check_id_establishment(self):
@@ -122,3 +122,14 @@ class RecurringSubscription(models.Model):
                     record.customer_id=partner
                 else:
                     raise ValidationError('no partner found')
+    #
+    # @api.model_create_multi
+    # def create(self, vals_list):
+    #     for vals in vals_list:
+    #         res=self.env['product.product'].create({
+    #             'name':vals.get('name'),
+    #             'list_price':vals.get('recurring_amount'),
+    #         })
+    #         vals['product']=res.id
+    #         print( vals['product'])
+    #     return super().create(vals_list)

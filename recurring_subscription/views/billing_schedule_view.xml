@@ -42,7 +42,7 @@
                       <button name="action_rec_sub_invoice"
                               type="object"
                               class="oe_stat_button">
-                          <field string="invoices " name="invoice_count" widget="statinfo"/>
+                          <field name="invoice_count" string="invoices "  widget="statinfo"/>
 
                       </button>
                   </div>
