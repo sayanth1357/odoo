@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-
 from odoo import fields,models,api
+from datetime import date
+
 class BillingSchedule(models.Model):
     _name = 'billing.schedule'
     _description = 'Billing schedule'
@@ -89,11 +90,8 @@ class BillingSchedule(models.Model):
             for rec in record.recurring_subscription_ids:
                 credit=self.env['recurring.subscription.credit'].search([('recurring_subscription_id','=',rec.id),
                                                                          ('state','=','fully approved'),
-                                                                         ('credit_amount','=',rec.recurring_amount)],limit=1)
-                if not credit:
-                    credit=self.env['recurring.subscription.credit'].search([('recurring_subscription_id','=',rec.id),
-                                                                             ('state', '=', 'fully approved'),
-                                                                             ('credit_amount','<=',rec.recurring_amount)],order='id ASC',limit=1)
+                                                                         ('credit_amount','<=',rec.recurring_amount)],order='credit_amount DESC, create_date ASC',limit=1)
+
 
                 print(credit)
                 print(record.recurring_subscription_ids)
@@ -104,14 +102,17 @@ class BillingSchedule(models.Model):
                     # 'name':rec.name,
                     'quantity':1,
                     'price_unit':rec.recurring_amount,
+
                 })]
 
                 if credit:
                     invoice_line_ids.append((0,0,{
-                        'name':credit,
+                        'name':credit.recurring_subscription_id.name + str(credit.create_date),
+                        # 'product_id':credit.
                         'quantity':1,
                         'price_unit':-credit.credit_amount,
                     }))
+                    print(credit.create_date)
                 print(invoice_line_ids)
 
                 invoice=self.env['account.move'].create({
@@ -121,12 +122,14 @@ class BillingSchedule(models.Model):
                     })
 
                 line_invoice_ids.append(invoice.id)
+                # record.active = False
 
-                record.write({
-                    'invoice_ids': line_invoice_ids
-                })
+            record.write({
+                    'invoice_ids': line_invoice_ids,
+                    'active':False
+            })
 
-                return{
+            return{
                     'name':'invoices',
                     'type':'ir.actions.act_window',
                     'res_model':'account.move',
@@ -134,6 +137,7 @@ class BillingSchedule(models.Model):
                     'view_type':'form',
                     'target':'current',
                     'res_id':invoice.id,
+
                 }
 
 
@@ -142,11 +146,10 @@ class BillingSchedule(models.Model):
         for record in self:
             record.invoice_count = len(record.invoice_ids)
 
-    def _create_daily_invoice(self):
-        for record in self:
-            for rec in record.recurring_subscription_ids:
-                print(record)
-                if rec.status=='confirm' and rec.due_date < rec.date:
-                    print(rec.status)
-                    print(rec.due_date)
-                    self.action_create_inv
+    # def _create_daily_invoice(self):
+    #     for record in self:
+    #         for rec in record.recurring_subscription_ids:
+    #              sub=self.env['recurring.subscription'].search([('status','=','confirm'),
+    #                                                         ('due_date', '<', date.today())])
+    #              for r in sub:
+    #                  r.action_create_inv()

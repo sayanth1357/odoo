@@ -15,7 +15,7 @@
           <list string="bill">
               <field name="billing_name"/>
               <field name="recurring_subscription_ids"/>
-              <field name="simulation_boolean"/>
+<!--              <field name="simulation_boolean"/>-->
           </list>
       </field>
     </record>
@@ -26,7 +26,7 @@
       <field name="arch" type="xml">
           <form string="billing">
                <header>
-                        <button  type="object" string="Create invoice" name="action_create_inv" class="btn-primary"/>
+                        <button  type="object" string="Create invoice" name="action_create_inv" class="btn-primary" />
                 </header>
               <sheet>
                   <div class="oe_button_box" name="button_box">

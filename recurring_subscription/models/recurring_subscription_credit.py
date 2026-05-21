@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-from typing import Self
 
 from odoo import fields,models,api
 from datetime import timedelta,date
-
-from odoo.orm.types import ValuesType
-
 
 class RecurringSubscriptionCredit(models.Model):
     _name = "recurring.subscription.credit"
@@ -14,7 +10,8 @@ class RecurringSubscriptionCredit(models.Model):
     _inherit = ['mail.thread','mail.activity.mixin']
 
     recurring_subscription_id=fields.Many2one('recurring.subscription',string="recurring subscription",
-                                               tracking=True )
+                                               tracking=True,require=True )
+    name1=fields.Char(string='recurring name',related='recurring_subscription_id.name')
     partner_id=fields.Many2one('res.partner',string="partner" ,
                                related="recurring_subscription_id.customer_id")
 
@@ -36,8 +33,11 @@ class RecurringSubscriptionCredit(models.Model):
     # end_date=fields.Date(string="End date")
     date_begin = fields.Date(string='period date', required=True, tracking=True)
     date_end = fields.Date(string='End Date', required=True, tracking=True)
-    product_ids=fields.Many2many('product.product',string='product')
+    create_date = fields.Datetime(string='Created on',readonly=True)
+    # product_ids=fields.Many2many('product.template',string='product')
+    # product=fields.Char(string='product')
     # recurring_subscription_res=fields.Char(string='rec')
+
 
 
     @api.onchange('credit_amount')
@@ -46,14 +46,14 @@ class RecurringSubscriptionCredit(models.Model):
             if record.recurring_subscription_id:
                 if record.credit_amount==0 or record.credit_amount > record.recurring_subscription_id.recurring_amount:
                     record.recurring_subscription_id=False
-    #
+
     # @api.model_create_multi
     # def create(self, vals_list):
     #     for vals in vals_list:
-    #         res=self.env['product.product'].create({
-    #             'name':vals.get('recurring_subscription_id'),
+    #         res=self.env['product.template'].create({
+    #             'name':vals.get('recurring_subscription_id.name'),
     #             'list_price':vals.get('credit_amount'),
     #         })
-    #         vals['recurring_subscription_res']=res.id
-    #         print( vals['recurring_subscription_res'])
+    #         vals['product']=res.id
+    #         print( vals['product'])
     #     return super().create(vals_list)

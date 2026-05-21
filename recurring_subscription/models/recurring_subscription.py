@@ -122,14 +122,33 @@ class RecurringSubscription(models.Model):
                     record.customer_id=partner
                 else:
                     raise ValidationError('no partner found')
-    #
-    # @api.model_create_multi
-    # def create(self, vals_list):
-    #     for vals in vals_list:
-    #         res=self.env['product.product'].create({
-    #             'name':vals.get('name'),
-    #             'list_price':vals.get('recurring_amount'),
-    #         })
-    #         vals['product']=res.id
-    #         print( vals['product'])
-    #     return super().create(vals_list)
+
+
+    def _create_daily_invoice(self):
+        # line_invoice_ids=[]
+        sub=self.search([('status','=','confirm'),
+                         ('due_date','<',date.today())
+                        ])
+        for rec in sub:
+            invoice_line_ids=[(0,0,{
+                'name':rec.name,
+                'product_id':rec.product_id.product_variant_id.id,
+                'quantity':1,
+                'price_unit':rec.recurring_amount,
+            })]
+            credit=self.env['recurring.subscription.credit'].search([('recurring_subscription_id','in',rec.id),
+                                                                      ('state','=','fully approved'),
+                                                                      ('credit_amount','<',rec.recurring_amount)])
+            if credit:
+                invoice_line_ids.append((0, 0, {
+                    'name': credit,
+                    'quantity': 1,
+                    'price_unit': -credit.credit_amount,
+                }))
+
+            self.env['account.move'].create({
+                'move_type':'out_invoice',
+                'partner_id':rec.customer_id.id,
+                'invoice_line_ids':invoice_line_ids
+            })
+

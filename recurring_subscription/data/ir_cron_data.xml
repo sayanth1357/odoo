@@ -3,7 +3,7 @@
     <data noupdate="1">
         <record id="cron_create_daily_invoice" model="ir.cron">
             <field name="name">Daily create invoice</field>
-            <field name="model_id" ref="recurring_subscription.model_billing_schedule"/>
+            <field name="model_id" ref="recurring_subscription.model_recurring_subscription"/>
             <field name="state">code</field>
             <field name="code">model._create_daily_invoice()</field>
             <field name="user_id" ref="base.user_root"/>

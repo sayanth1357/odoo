@@ -1,7 +1,6 @@
 import random
 import string
 from odoo import models,fields,api
-from odoo.exceptions import ValidationError
 import re
 class ResPartner(models.Model):
     _inherit = 'res.partner'
