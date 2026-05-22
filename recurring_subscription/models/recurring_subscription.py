@@ -124,31 +124,31 @@ class RecurringSubscription(models.Model):
                     raise ValidationError('no partner found')
 
 
-    def _create_daily_invoice(self):
-        # line_invoice_ids=[]
-        sub=self.search([('status','=','confirm'),
-                         ('due_date','<',date.today())
-                        ])
-        for rec in sub:
-            invoice_line_ids=[(0,0,{
-                'name':rec.name,
-                'product_id':rec.product_id.product_variant_id.id,
-                'quantity':1,
-                'price_unit':rec.recurring_amount,
-            })]
-            credit=self.env['recurring.subscription.credit'].search([('recurring_subscription_id','in',rec.id),
-                                                                      ('state','=','fully approved'),
-                                                                      ('credit_amount','<',rec.recurring_amount)])
-            if credit:
-                invoice_line_ids.append((0, 0, {
-                    'name': credit,
-                    'quantity': 1,
-                    'price_unit': -credit.credit_amount,
-                }))
-
-            self.env['account.move'].create({
-                'move_type':'out_invoice',
-                'partner_id':rec.customer_id.id,
-                'invoice_line_ids':invoice_line_ids
-            })
-
+    # def _create_daily_invoice(self):
+    #     # line_invoice_ids=[]
+    #     sub=self.search([('status','=','confirm'),
+    #                      ('due_date','<',date.today())
+    #                     ])
+    #     for rec in sub:
+    #         invoice_line_ids=[(0,0,{
+    #             'name':rec.name,
+    #             'product_id':rec.product_id.product_variant_id.id,
+    #             'quantity':1,
+    #             'price_unit':rec.recurring_amount,
+    #         })]
+    #         credit=self.env['recurring.subscription.credit'].search([('recurring_subscription_id','in',rec.id),
+    #                                                                   ('state','=','fully approved'),
+    #                                                                   ('credit_amount','<',rec.recurring_amount)])
+    #         if credit:
+    #             invoice_line_ids.append((0, 0, {
+    #                 'name': credit,
+    #                 'quantity': 1,
+    #                 'price_unit': -credit.credit_amount,
+    #             }))
+    #
+    #         self.env['account.move'].create({
+    #             'move_type':'out_invoice',
+    #             'partner_id':rec.customer_id.id,
+    #             'invoice_line_ids':invoice_line_ids
+    #         })
+    # #

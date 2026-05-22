@@ -10,13 +10,14 @@ class RecurringSubscriptionCredit(models.Model):
     _inherit = ['mail.thread','mail.activity.mixin']
 
     recurring_subscription_id=fields.Many2one('recurring.subscription',string="recurring subscription",
-                                               tracking=True,require=True )
+                                               tracking=True,required=True )
     name1=fields.Char(string='recurring name',related='recurring_subscription_id.name')
     partner_id=fields.Many2one('res.partner',string="partner" ,
                                related="recurring_subscription_id.customer_id")
 
     id_establishment=fields.Char(string="Establishment id", related="recurring_subscription_id.id_establishment")
-    due_date=fields.Date(default=date.today()+timedelta(days=15), string="Due Date")
+    # due_date=fields.Date(default=date.today()+timedelta(days=15), string="Due Date")
+    due_date=fields.Date(string='Due date',related='recurring_subscription_id.due_date')
     company_id=fields.Many2one('res.company',store=True,string="company",copy="False",
                                default=lambda self:self.env.user.company_id.id)
     currency_id=fields.Many2one("res.currency",string="currency",related='company_id.currency_id',
@@ -47,13 +48,3 @@ class RecurringSubscriptionCredit(models.Model):
                 if record.credit_amount==0 or record.credit_amount > record.recurring_subscription_id.recurring_amount:
                     record.recurring_subscription_id=False
 
-    # @api.model_create_multi
-    # def create(self, vals_list):
-    #     for vals in vals_list:
-    #         res=self.env['product.template'].create({
-    #             'name':vals.get('recurring_subscription_id.name'),
-    #             'list_price':vals.get('credit_amount'),
-    #         })
-    #         vals['product']=res.id
-    #         print( vals['product'])
-    #     return super().create(vals_list)

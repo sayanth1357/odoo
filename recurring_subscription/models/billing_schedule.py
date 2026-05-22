@@ -146,6 +146,54 @@ class BillingSchedule(models.Model):
         for record in self:
             record.invoice_count = len(record.invoice_ids)
 
+    def _create_daily_invoice(self):
+        line_invoice_ids=[]
+
+        records=self.search([])
+        for record in records:
+            if record.recurring_subscription_ids:
+                    for rec in record.recurring_subscription_ids:
+                        if rec.status=='confirm' and rec.due_date<date.today():
+                           
+                            invoice_line_ids=[(0,0,{
+                                'name':rec.name,
+                                'product_id':rec.product_id.product_variant_id.id,
+                                'quantity':1,
+                                'price_unit':rec.recurring_amount,
+                           })]
+                            credit=self.env['recurring.subscription.credit'].search([('recurring_subscription_id','in',rec.id),
+                                                                                      ('state','=','fully approved'),
+                                                                                      ('credit_amount','<',rec.recurring_amount)])
+                            if credit:
+                                invoice_line_ids.append((0, 0, {
+                                'name':credit.recurring_subscription_id.name + str(credit.create_date),
+                                'quantity':1,
+                                'price_unit':-credit.credit_amount,
+                                }))
+
+                            invoice=self.env['account.move'].create({
+                                'move_type':'out_invoice',
+                                'partner_id':rec.customer_id.id,
+                                'invoice_line_ids':invoice_line_ids
+                            })
+                            line_invoice_ids.append(invoice.id)
+                        record.write({
+                            'invoice_ids': line_invoice_ids,
+                            'active': False
+                        })
+
+                    return {
+                            'name': 'invoices',
+                            'type': 'ir.actions.act_window',
+                            'res_model': 'account.move',
+                            'view_mode': 'form',
+                            'view_type': 'form',
+                            'target': 'current',
+                            # 'res_id': invoice.id,
+                            'domain':[('id','in',line_invoice_ids)]
+
+                        }
+
     # def _create_daily_invoice(self):
     #     for record in self:
     #         for rec in record.recurring_subscription_ids:

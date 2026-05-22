@@ -6,6 +6,7 @@
     'depends': ['base','product','mail','contacts','crm','account'],
     'data':[
         'security/ir.model.access.csv',
+        # 'security/subscription_security.xml',
         'views/recurring_subscription_views.xml',
         'views/recurring_subscription_credit_view.xml',
         'data/sequence_data.xml',
@@ -16,6 +17,7 @@
         'views/crm_lead_view.xml',
         # 'views/acoount_move_line_view.xml',
         # 'views/account_movie_view.xml'
+        # 'security/groups.xml'
         'views/recurring_subscription_menu.xml',
         'data/demo_data.xml',
         'data/mail_template_data.xml',
