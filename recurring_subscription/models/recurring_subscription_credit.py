@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import fields,models,api
-from datetime import timedelta,date
 
 class RecurringSubscriptionCredit(models.Model):
     _name = "recurring.subscription.credit"
@@ -16,7 +15,6 @@ class RecurringSubscriptionCredit(models.Model):
                                related="recurring_subscription_id.customer_id")
 
     id_establishment=fields.Char(string="Establishment id", related="recurring_subscription_id.id_establishment")
-    # due_date=fields.Date(default=date.today()+timedelta(days=15), string="Due Date")
     due_date=fields.Date(string='Due date',related='recurring_subscription_id.due_date')
     company_id=fields.Many2one('res.company',store=True,string="company",copy="False",
                                default=lambda self:self.env.user.company_id.id)
@@ -30,14 +28,11 @@ class RecurringSubscriptionCredit(models.Model):
         ('fully approved','Fully approved'),
         ('rejected','Rejected')]
         ,default='pending',tracking=True)
-    # start_date=fields.Date(string="Start date")
-    # end_date=fields.Date(string="End date")
+
     date_begin = fields.Date(string='period date', required=True, tracking=True)
     date_end = fields.Date(string='End Date', required=True, tracking=True)
     create_date = fields.Datetime(string='Created on',readonly=True)
-    # product_ids=fields.Many2many('product.template',string='product')
-    # product=fields.Char(string='product')
-    # recurring_subscription_res=fields.Char(string='rec')
+
 
 
 

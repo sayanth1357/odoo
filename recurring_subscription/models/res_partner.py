@@ -1,7 +1,6 @@
 import random
 import string
 from odoo import models,fields,api
-import re
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     _rec_name = 'account_id'

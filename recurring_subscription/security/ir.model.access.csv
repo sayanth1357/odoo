@@ -1,6 +1,11 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_recurring_subscription,recurring.subscription,model_recurring_subscription,base.group_user,1,1,1,1
-access_recurring_subscription_credit,recurring.subscription.credit,model_recurring_subscription_credit,base.group_user,1,1,1,1
-access_billing_schedule,billing.schedule,model_billing_schedule,base.group_user,1,1,1,1
 access_product_order_lines,product.order.lines,model_product_order_lines,base.group_user,1,1,1,1
 access_partner_account_id,partner.account.id,model_partner_account_id,base.group_user,1,1,1,1
+
+access_recurring_subscription_user,recurring.subscription,model_recurring_subscription,recurring_subscription.group_subscription_user,1,0,1,0
+access_recurring_subscription_manager,recurring.subscription,model_recurring_subscription,recurring_subscription.group_subscription_manager,1,1,1,1
+access_recurring_subscription_credit_manager,recurring.subscription.credit,model_recurring_subscription_credit,recurring_subscription.group_subscription_manager,1,1,1,1
+access_recurring_subscription_credit_user,recurring.subscription.credit,model_recurring_subscription_credit,group_subscription_user,1,0,1,0
+access_billing_schedule_manager,billing.schedule,model_billing_schedule,group_subscription_manager,1,1,1,1
+access_billing_schedule_user,billing.schedule,model_billing_schedule,group_subscription_user,1,1,1,0
+

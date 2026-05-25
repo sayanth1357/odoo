@@ -11,14 +11,13 @@ class BillingSchedule(models.Model):
 
     simulation_boolean=fields.Boolean(string="Simulation")
     billing_name=fields.Char(string='Name',tracking=True)
-    billing=fields.Char(string='billing')
     date_begin = fields.Date(string='period', required=True, tracking=True)
     date_end = fields.Date(string='End Date', required=True, tracking=True)
     active=fields.Boolean(string="Active" ,default=True)
     customer_id=fields.Many2many('res.partner',string='customer')
     recurring_subscription_ids=fields.Many2many('recurring.subscription',
                                                string="recurring subscription",tracking=True,required=True)
-    company_id = fields.Many2one('res.company', store=True, string="company", copy="False",
+    company_id = fields.Many2one('res.company', store=True, string="company", copy="False",related='recurring_subscription_ids.company_id',
                                  default=lambda self: self.env.user.company_id.id)
     currency_id = fields.Many2one("res.currency", string="currency", related='company_id.currency_id',
                                   default=lambda self: self.env.user.company_id.currency_id.id)
@@ -88,57 +87,52 @@ class BillingSchedule(models.Model):
         line_invoice_ids=[]
         for record in self:
             for rec in record.recurring_subscription_ids:
-                credit=self.env['recurring.subscription.credit'].search([('recurring_subscription_id','=',rec.id),
-                                                                         ('state','=','fully approved'),
-                                                                         ('credit_amount','<=',rec.recurring_amount)],order='credit_amount DESC, create_date ASC',limit=1)
+
+                    credit=self.env['recurring.subscription.credit'].search([
+                        ('recurring_subscription_id','=',rec.id),
+                        ('state','=','fully approved'),
+                        ('credit_amount','<=',rec.recurring_amount)],
+                        order='credit_amount DESC, create_date ASC',limit=1)
 
 
-                print(credit)
-                print(record.recurring_subscription_ids)
-
-                invoice_line_ids=[(0,0,{
-                    'name':rec.name,
-                    'product_id':rec.product_id.product_variant_id.id,
-                    # 'name':rec.name,
-                    'quantity':1,
-                    'price_unit':rec.recurring_amount,
-
-                })]
-
-                if credit:
-                    invoice_line_ids.append((0,0,{
-                        'name':credit.recurring_subscription_id.name + str(credit.create_date),
-                        # 'product_id':credit.
+                    invoice_line_ids=[(0,0,{
+                        'name':rec.name,
+                        'product_id':rec.product_id.product_variant_id.id,
                         'quantity':1,
-                        'price_unit':-credit.credit_amount,
-                    }))
-                    print(credit.create_date)
-                print(invoice_line_ids)
+                        'price_unit':rec.recurring_amount,
 
-                invoice=self.env['account.move'].create({
-                    'move_type':'out_invoice',
-                    'partner_id': rec.customer_id.id,
-                    'invoice_line_ids':invoice_line_ids,
+                    })]
+
+                    if credit:
+                        invoice_line_ids.append((0,0,{
+                            'name':credit.recurring_subscription_id.name + str(credit.create_date),
+                            'quantity':1,
+                            'price_unit':-credit.credit_amount,
+                        }))
+
+                    invoice=self.env['account.move'].create({
+                        'move_type':'out_invoice',
+                        'partner_id': rec.customer_id.id,
+                        'invoice_line_ids':invoice_line_ids,
+                        })
+
+                    line_invoice_ids.append(invoice.id)
+
+                    record.write({
+                            'invoice_ids': line_invoice_ids,
+                            'active':False
                     })
 
-                line_invoice_ids.append(invoice.id)
-                # record.active = False
-
-            record.write({
-                    'invoice_ids': line_invoice_ids,
-                    'active':False
-            })
-
             return{
-                    'name':'invoices',
-                    'type':'ir.actions.act_window',
-                    'res_model':'account.move',
-                    'view_mode':'form',
-                    'view_type':'form',
-                    'target':'current',
-                    'res_id':invoice.id,
+                        'name':'invoices',
+                        'type':'ir.actions.act_window',
+                        'res_model':'account.move',
+                        'view_mode':'form',
+                        'view_type':'form',
+                        'target':'current',
+                        'res_id':invoice.id,
 
-                }
+                    }
 
 
     @api.depends('credits_ids')
@@ -147,57 +141,7 @@ class BillingSchedule(models.Model):
             record.invoice_count = len(record.invoice_ids)
 
     def _create_daily_invoice(self):
-        line_invoice_ids=[]
-
-        records=self.search([])
-        for record in records:
-            if record.recurring_subscription_ids:
-                    for rec in record.recurring_subscription_ids:
-                        if rec.status=='confirm' and rec.due_date<date.today():
-                           
-                            invoice_line_ids=[(0,0,{
-                                'name':rec.name,
-                                'product_id':rec.product_id.product_variant_id.id,
-                                'quantity':1,
-                                'price_unit':rec.recurring_amount,
-                           })]
-                            credit=self.env['recurring.subscription.credit'].search([('recurring_subscription_id','in',rec.id),
-                                                                                      ('state','=','fully approved'),
-                                                                                      ('credit_amount','<',rec.recurring_amount)])
-                            if credit:
-                                invoice_line_ids.append((0, 0, {
-                                'name':credit.recurring_subscription_id.name + str(credit.create_date),
-                                'quantity':1,
-                                'price_unit':-credit.credit_amount,
-                                }))
-
-                            invoice=self.env['account.move'].create({
-                                'move_type':'out_invoice',
-                                'partner_id':rec.customer_id.id,
-                                'invoice_line_ids':invoice_line_ids
-                            })
-                            line_invoice_ids.append(invoice.id)
-                        record.write({
-                            'invoice_ids': line_invoice_ids,
-                            'active': False
-                        })
-
-                    return {
-                            'name': 'invoices',
-                            'type': 'ir.actions.act_window',
-                            'res_model': 'account.move',
-                            'view_mode': 'form',
-                            'view_type': 'form',
-                            'target': 'current',
-                            # 'res_id': invoice.id,
-                            'domain':[('id','in',line_invoice_ids)]
-
-                        }
-
-    # def _create_daily_invoice(self):
-    #     for record in self:
-    #         for rec in record.recurring_subscription_ids:
-    #              sub=self.env['recurring.subscription'].search([('status','=','confirm'),
-    #                                                         ('due_date', '<', date.today())])
-    #              for r in sub:
-    #                  r.action_create_inv()
+        for record in self.search([]):
+                for rec in record.recurring_subscription_ids:
+                    if rec.status == 'confirm' and rec.due_date < date.today():
+                        record.action_create_inv()

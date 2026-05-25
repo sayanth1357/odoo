@@ -31,7 +31,7 @@
                 <header>
                        <field name="status" widget="statusbar"  statusbar_visible="draft,confirm,done" readonly="1"/>
                         <button  type="object" string="Confirm" name="action_confirm_btn" class="btn-primary"
-                                 invisible="status in['confirm','cancel','done'] " />
+                                 invisible="status in['confirm','cancel','done'] " groups="recurring_subscription.group_subscription_manager"/>
                         <button type="object" string="cancel" name="action_cancel_btn"
                                 invisible="status not in ['draft', 'confirm', 'done'] or not id "/>
                         <button type="object" string="Done" name="action_done_btn"
