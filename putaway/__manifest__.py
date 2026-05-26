@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'vip discount',
+    'name': 'putaway ',
     'author':'cybrosys',
     'description': """This module contains the discount for vip customers""",
-    'depends': ['base','contacts','sale'],
-    'data':[
-       # 'views/res_partner_view.xml',
-       #  'views/sale_order_view.xml'
-    ],
-
+    'depends': ['base','purchase','stock','purchase_stock'],
 
     'installable':True,
     'application': True
