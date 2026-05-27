@@ -13,7 +13,7 @@
                 <field name="approving_user"/>
            </xpath>
 
-           <xpath expr="//button[@name='_create_invoice']" position="attributes">
+           <xpath expr="//button[@name='create_invoice']" position="attributes">
                <attribute name="state">approved</attribute>
            </xpath>
 
