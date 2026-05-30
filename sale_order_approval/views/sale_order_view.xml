@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-   <record id="view_partner_form_inherit_state" model="ir.ui.view">
-       <field name="name">sale.order.form.inherit.state</field>
-       <field name="model">sale.order</field>
-       <field name="inherit_id" ref="sale.view_order_form"/>
-       <field name="arch" type="xml">
-           <xpath expr="//field[@name='state']" position="attributes">
-               <attribute name="statusbar_visible">draft,sent,sale,approved</attribute>
-           </xpath>
+    <record id="view_partner_form_inherit_state" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.state</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,sent,sale,approved</attribute>
+            </xpath>
 
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="approving_user"/>
-           </xpath>
+            </xpath>
 
-           <xpath expr="//button[@name='create_invoice']" position="attributes">
-               <attribute name="state">approved</attribute>
-           </xpath>
-
-            <xpath expr="//header" position="inside">
-                <button name="action_approve_btn" string="Approve" type="object"  invisible="state in ['draft','approved']" />
+            <xpath expr="//button[@id='create_invoice']" position="attributes">
+                <attribute name="invisible">state != 'approved'</attribute>
             </xpath>
 
 
-       </field>
-   </record>
+            <xpath expr="//header" position="inside">
+                <button name="action_approve_btn" string="Approve" type="object"
+                        invisible="state in ['draft','approved']"/>
+            </xpath>
+
+        </field>
+    </record>
 </odoo>

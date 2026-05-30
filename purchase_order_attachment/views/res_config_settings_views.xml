@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <!-- Sale Config Settings Inherit -->
+   <record id="res_config_settings_view_form_inherit_purchase_attachment" model="ir.ui.view">
+       <field name="name">res.config.settings.view.form.inherit.require.attachment</field>
+       <field name="model">res.config.settings</field>
+       <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+       <field name="arch" type="xml">
+           <xpath expr="//form" position="inside">
+               <app data-string="Purchase" string="Purchase" name="purchase" groups="purchase.group_purchase_manager">
+                   <block title="purchase attachment" name="purchase_attachment_mandatory">
+                       <setting string="Require Attachment on Purchase Order Confirmation"
+                                help="Enable this setting  to restrict confirmation of purchase orders without attachments">
+                           <field name="require_attachment"/>
+                       </setting>
+                   </block>
+               </app>
+           </xpath>
+       </field>
+   </record>
+</odoo>

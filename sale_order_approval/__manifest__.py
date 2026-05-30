@@ -4,10 +4,9 @@
     'name': 'sale order approval',
     'author':'cybrosys',
     'description': """This module contains the sale order approvals""",
-    'depends': ['base','sale'],
+    'depends': ['base','sale_management'],
     'data': [
         'views/sale_order_view.xml',
-        'security/sale_approval_security.xml'
     ],
 
     'installable':True,
