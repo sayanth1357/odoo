@@ -8,4 +8,3 @@ class ResConfigSettings(models.TransientModel):
                                      config_parameter='purchase.require_attachment')
 
 
-
