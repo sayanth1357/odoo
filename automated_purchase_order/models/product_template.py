@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from odoo import models,fields
 class ProductTemplate(models.Model):
 
@@ -10,5 +11,6 @@ class ProductTemplate(models.Model):
             'res_model': 'purchase.order.wizard',
             'view_mode': 'form',
             'target': 'new',
-            'context': {'active_ids': self.ids},
+            'context': {'default_product_id':self.id,
+                        'default_seller_ids':self.seller_ids}
         }

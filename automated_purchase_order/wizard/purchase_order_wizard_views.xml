@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
    <record id="product_template_purchase_wizard_form_inherit_quantity" model="ir.ui.view">
        <field name="name">purchase.order.wizard.form.inherit.quantity</field>
@@ -5,12 +6,14 @@
        <field name="arch" type="xml">
            <form string="Automated po">
                <group>
+                   <field name="product_id"/>
                    <field name="quantity"/>
+                   <field name="currency_id" invisible="1"/>
                    <field name="price"/>
                </group>
                <footer>
-                   <button string="confirm" type="object"  class="btn-primary"/>
-                   <button string="Cancel"  type="object" />
+                   <button string="confirm" name="confirm_btn" type="object"  class="btn-primary"/>
+                   <button string="Cancel"  type="object" special="cancel"/>
                </footer>
            </form>
        </field>
