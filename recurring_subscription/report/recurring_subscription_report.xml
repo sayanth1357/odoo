@@ -1,0 +1,13 @@
+ <record id="action_report_truck_booking_form" model="ir.actions.report">
+        <field name="name">Recurring Subscription</field>
+        <field name="model">recurring.subscription</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">
+           recurring_subscription.form_recurring_subscription_report
+        </field>
+        <field name="report_file">
+           recurring_subscription.form_recurring_subscription_report
+        </field>
+        <field name="binding_model_id" ref="model_recurring_subscription"/>
+        <field name="binding_type">report</field>
+    </record>

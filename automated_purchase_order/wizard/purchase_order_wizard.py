@@ -3,7 +3,8 @@ from odoo import models, fields
 class PurchaseOrderWizard(models.TransientModel):
    _name = 'purchase.order.wizard'
    _description = 'Wizard for Automatic Purchase order'
-   product_id=fields.Many2one('product.template',string='product')
+
+   product_id=fields.Many2one('product.template',string='product',readonly=True)
    quantity=fields.Float(string='Quantity')
    company_id = fields.Many2one('res.company', store=True, string="company", copy="False",
                                 default=lambda self: self.env.user.company_id.id)
