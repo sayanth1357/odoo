@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <record id="action_recurring_subscription_credit_wizard" model="ir.actions.act_window">
+        <field name="name">Subscription Credit Report</field>
+        <field name="res_model">recurring.subscription.credit.wizard</field>
+         <field name="target">new</field>
+        <field name="view_mode">form</field>
+    </record>
+
+       <record id="recurring_subcription_credit_wizard_view" model="ir.ui.view">
+           <field name="name">recurring.subscription.credit.wizard</field>
+           <field name="model">recurring.subscription.credit.wizard</field>
+           <field name="arch" type="xml">
+               <form string="Credit Report">
+                   <group>
+                       <field name="subscription_id"/>
+                       <field name="state"/>
+                   </group>
+                   <footer>
+                       <button string="Print PDF" type="object"  class="btn-primary"/>
+                       <button string="Cancel"  type="object" special="cancel"/>
+                   </footer>
+               </form>
+           </field>
+       </record>
+</odoo>

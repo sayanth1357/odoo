@@ -9,3 +9,5 @@ access_recurring_subscription_credit_user,recurring.subscription.credit,model_re
 access_billing_schedule_manager,billing.schedule,model_billing_schedule,group_subscription_manager,1,1,1,1
 access_billing_schedule_user,billing.schedule,model_billing_schedule,group_subscription_user,1,1,1,0
 
+access_recurring_subscription_wizard,recurring.subscription.wizard,model_recurring_subscription_wizard,base.group_user,1,1,1,1
+access_recurring_subscription_credit_wizard,recurring.subscription.credit.wizard,model_recurring_subscription_credit_wizard,base.group_user,1,1,1,1
