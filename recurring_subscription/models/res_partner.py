@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import random
 import string
 from odoo import models,fields,api

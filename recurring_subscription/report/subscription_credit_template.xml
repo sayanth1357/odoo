@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="form_r_s_report">
+    <template id="rec_sub_credit_report">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <div class="text-center">
-                                <h1>Subscription Report</h1>
+                                <h1> Subscription Credit Report</h1>
                             </div>
                             <h3>Customer:
                                 <span t-field="o.name"/>
@@ -16,34 +16,31 @@
                                 <thead>
                                      <tr>
                                          <th>SL.No</th>
-                                         <th>Name></th>
+                                         <th>Subscription></th>
                                          <th>Customer</th>
-                                         <th>Product</th>
-                                         <th>Amount</th>
+                                         <th>Amount applied</th>
+                                         <th>Amount pending</th>
                                          <th>State</th>
                                      </tr>
                                 </thead>
                                 <tbody>
                                     <t t-set="sl_no" t-value="1"/>
-                                    <t t-foreach="docs" t-as="o">
+                                    <t t-foreach="docs" t-as="credit">
                                         <tr>
                                             <td>
                                                 <t t-esc="sl_no"/>
                                             </td>
                                             <td>
-                                                <t t-esc="o.name"/>
+                                                <t t-esc="credit.recurring_subscription_id"/>
                                             </td>
                                             <td>
-                                                <t t-esc="o.customer_id"/>
+                                                <t t-esc="credit.partner_id"/>
                                             </td>
                                             <td>
-                                                <t t-esc="o.product_id"/>
+                                                <t t-esc="credit.credit_amount"/>
                                             </td>
                                             <td>
-                                                <t t-esc="o.recurring_amount"/>
-                                            </td>
-                                            <td>
-                                                <t t-esc="o.state"/>
+                                                <t t-esc="credit.state"/>
                                             </td>
                                         </tr>
                                         <t t-set="sl_no" t-value="sl_no+1"/>
@@ -55,4 +52,5 @@
                 </t>
             </t>
      </template>
+
 </odoo>

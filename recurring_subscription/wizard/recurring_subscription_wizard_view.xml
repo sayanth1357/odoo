@@ -14,12 +14,14 @@
            <field name="arch" type="xml">
                <form string="Report">
                    <group>
+                       <field name="date_from"/>
+                       <field name="date_to"/>
                        <field name="subscription_id"/>
                        <field name="report"/>
                        <field name="partner_id"/>
                    </group>
                    <footer>
-                       <button string="Print PDF" name="pdf_button" type="object"  class="btn-primary"/>
+                       <button string="Print PDF" name="action_report_subscription" type="object"  class="btn-primary"/>
                        <button string="Cancel"  type="object" special="cancel"/>
                    </footer>
                </form>

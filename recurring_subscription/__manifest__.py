@@ -7,6 +7,9 @@
     'data':[
         'security/ir.model.access.csv',
         'security/subscription_security.xml',
+        'report/ir_actions_report.xml',
+        'report/recurring_subscription_template.xml',
+        'report/subscription_credit_template.xml',
         'views/recurring_subscription_views.xml',
         'views/recurring_subscription_credit_view.xml',
         'data/sequence_data.xml',
@@ -19,8 +22,6 @@
         'wizard/recurring_subscription_credit_wizard_view.xml',
         'views/recurring_subscription_menu.xml',
         'data/demo_data.xml',
-        'report/ir_actions_report.xml',
-        'report/recurring_subscription_template.xml',
         'data/mail_template_data.xml',
         'data/ir_cron_data.xml',
     ],
