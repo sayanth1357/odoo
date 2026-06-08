@@ -9,17 +9,17 @@
                                 <h1> Subscription Credit Report</h1>
                             </div>
                             <h3>Customer:
-                                <span t-field="o.name"/>
-                                <span t-field="o.customer_id"/>
+<!--                                <span t-field="o.name"/>-->
+                                <span t-field="o.partner_id"/>
                             </h3>
-                             <table class="table">
+                             <table class="table table-borderless">
                                 <thead>
                                      <tr>
                                          <th>SL.No</th>
                                          <th>Subscription></th>
                                          <th>Customer</th>
                                          <th>Amount applied</th>
-                                         <th>Amount pending</th>
+<!--                                         <th>Amount pending</th>-->
                                          <th>State</th>
                                      </tr>
                                 </thead>
@@ -31,16 +31,16 @@
                                                 <t t-esc="sl_no"/>
                                             </td>
                                             <td>
-                                                <t t-esc="credit.recurring_subscription_id"/>
+                                                <t t-esc="credit['recurring_subscription_id']"/>
                                             </td>
                                             <td>
-                                                <t t-esc="credit.partner_id"/>
+                                                <t t-esc="credit['partner_id']"/>
                                             </td>
                                             <td>
-                                                <t t-esc="credit.credit_amount"/>
+                                                <t t-esc="credit['credit_amount']"/>
                                             </td>
                                             <td>
-                                                <t t-esc="credit.state"/>
+                                                <t t-esc="credit['state']"/>
                                             </td>
                                         </tr>
                                         <t t-set="sl_no" t-value="sl_no+1"/>

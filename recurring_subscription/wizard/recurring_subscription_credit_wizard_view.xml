@@ -18,7 +18,7 @@
                        <field name="state"/>
                    </group>
                    <footer>
-                       <button string="Print PDF" type="object"  class="btn-primary"/>
+                       <button string="Print PDF" name="action_credit_report" type="object"  class="btn-primary"/>
                        <button string="Cancel"  type="object" special="cancel"/>
                    </footer>
                </form>

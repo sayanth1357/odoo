@@ -5,12 +5,8 @@
         <field name="name">Recurring Subscription</field>
         <field name="model">recurring.subscription</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">
-            recurring_subscription.form_r_s_report
-        </field>
-        <field name="report_file">
-            recurring_subscription.form_r_s_report
-        </field>
+        <field name="report_name">recurring_subscription.form_r_s_report</field>
+        <field name="report_file">recurring_subscription.form_r_s_report</field>
         <field name="binding_model_id" ref="recurring_subscription.model_recurring_subscription"/>
         <field name="binding_type">report</field>
     </record>
@@ -21,12 +17,8 @@
         <field name="name">Recurring Subscription Credit</field>
         <field name="model">recurring.subscription.credit</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">
-            recurring_subscription.rec_sub_credit_report
-        </field>
-        <field name="report_file">
-            recurring_subscription.rec_sub_credit_report
-        </field>
+        <field name="report_name">recurring_subscription.rec_sub_credit_report</field>
+        <field name="report_file">recurring_subscription.rec_sub_credit_report</field>
         <field name="binding_model_id" ref="recurring_subscription.model_recurring_subscription_credit"/>
         <field name="binding_type">report</field>
     </record>
