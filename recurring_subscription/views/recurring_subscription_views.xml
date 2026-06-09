@@ -53,6 +53,7 @@
                             <field name="date"/>
                             <field name="due_date"/>
                             <field name="next_billing"/>
+                            <field name="total_credit_applied"/>
                         </group>
                         <group>
                             <field name="is_lead"/>

@@ -14,8 +14,6 @@
            <field name="arch" type="xml">
                <form string="Report">
                    <group>
-                       <field name="from_date"/>
-                       <field name="to_date"/>
                        <field name="subscription_id"/>
                        <field name="report"/>
                        <field name="partner_id"/>

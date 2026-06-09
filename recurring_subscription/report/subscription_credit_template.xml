@@ -2,42 +2,42 @@
 <odoo>
     <template id="rec_sub_credit_report">
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+<!--                <t t-foreach="docs" t-as="o">-->
                     <t t-call="web.external_layout">
                         <div class="page">
+                            <div class="oe_structure"/>
                             <div class="text-center">
                                 <h1> Subscription Credit Report</h1>
                             </div>
-                            <h3>Customer:
-<!--                                <span t-field="o.name"/>-->
-                                <span t-field="o.partner_id"/>
-                            </h3>
-                             <table class="table table-borderless">
+                             <table class="table ">
                                 <thead>
                                      <tr>
                                          <th>SL.No</th>
-                                         <th>Subscription></th>
+                                         <th>Subscription</th>
                                          <th>Customer</th>
                                          <th>Amount applied</th>
-<!--                                         <th>Amount pending</th>-->
+                                         <th>Amount pending</th>
                                          <th>State</th>
                                      </tr>
                                 </thead>
                                 <tbody>
                                     <t t-set="sl_no" t-value="1"/>
-                                    <t t-foreach="docs" t-as="credit">
+                                    <t t-foreach="data.get('report')" t-as="credit">
                                         <tr>
                                             <td>
                                                 <t t-esc="sl_no"/>
                                             </td>
                                             <td>
-                                                <t t-esc="credit['recurring_subscription_id']"/>
+                                                <t t-esc="credit['subscription']"/>
                                             </td>
                                             <td>
-                                                <t t-esc="credit['partner_id']"/>
+                                                <t t-esc="credit['customer']"/>
                                             </td>
                                             <td>
-                                                <t t-esc="credit['credit_amount']"/>
+                                                <t t-esc="credit['amount_applied']"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="credit['pending_amount']"/>
                                             </td>
                                             <td>
                                                 <t t-esc="credit['state']"/>
@@ -49,7 +49,7 @@
                             </table>
                         </div>
                     </t>
-                </t>
+<!--                </t>-->
             </t>
      </template>
 

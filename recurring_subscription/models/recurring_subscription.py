@@ -40,6 +40,7 @@ class RecurringSubscription(models.Model):
                                                       store=True)
     order_lines_ids=fields.One2many('product.order.lines',inverse_name="order_lines_id", string="product")
     product_filter_ids=fields.Many2many('product.template',string="Product filter")
+    total_credit_applied=fields.Monetary(string='Total credit applied',compute='_compute_total_credit_applied',store=True)
 
     @api.model_create_multi
     def create(self,vals):
@@ -116,3 +117,9 @@ class RecurringSubscription(models.Model):
                     record.customer_id=partner
                 else:
                     raise ValidationError('no partner found')
+
+    @api.depends('recurring_subscription_credit_ids.credit_amount','recurring_subscription_credit_ids.state')
+    def _compute_total_credit_applied(self):
+        for record in self:
+            record.total_credit_applied=sum(record.recurring_subscription_credit_ids.filtered
+                                            (lambda c:c.state=='fully approved').mapped('credit_amount'))

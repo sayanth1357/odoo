@@ -1,2 +1,4 @@
+# -*- coding: utf-8 -*-
+
 from . import recurring_subscription_wizard
 from . import recurring_subscription_credit_wizard
