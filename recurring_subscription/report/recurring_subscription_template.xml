@@ -10,17 +10,32 @@
                             <div class="text-center">
                                 <h1>Subscription Report</h1>
                             </div>
+                            <t t-if="name_len==1">
+                                 <div>
+                                        <h4>Name: <span t-out="subname[0]"/></h4>
+                                 </div>
+                            </t>
+                            <t t-if="length==1">
+                                    <div>
+                                        <h4>status: <span t-out="subs[0]"/></h4>
+                                    </div>
+                            </t>
 
-                             <table class="table">
+
+                             <table class="table table-bordered mb64">
                                 <thead>
                                      <tr>
-                                         <th>SL.No</th>
-                                         <th>Name</th>
-                                         <th>Customer</th>
-                                         <th>Product</th>
-                                         <th>Amount</th>
-                                         <th>Total credit applied</th>
-                                         <th>Status</th>
+                                         <th><strong>SL.No</strong></th>
+                                         <t t-if="name_len!=1">
+                                            <th><strong>Name</strong></th>
+                                         </t>
+                                         <th><strong>Customer</strong></th>
+                                         <th><strong>Product</strong></th>
+                                         <th><strong>Amount</strong></th>
+                                         <th><strong>Total credit applied</strong></th>
+                                         <t t-if="length!=1">
+                                            <th><strong>Status</strong></th>
+                                         </t>
                                      </tr>
                                 </thead>
                                 <tbody>
@@ -30,9 +45,11 @@
                                             <td>
                                                 <t t-esc="sl_no"/>
                                             </td>
-                                            <td>
-                                                <t t-esc="o['name']"/>
-                                            </td>
+                                            <t t-if="name_len!=1">
+                                                <td>
+                                                    <t t-esc="o['name']"/>
+                                                </td>
+                                            </t>
                                             <td>
                                                 <t t-esc="o['customer']"/>
                                             </td>
@@ -45,14 +62,26 @@
                                             <td>
                                                 <t t-esc="o['total_credit_applied']"/>
                                             </td>
-                                            <td>
-                                                <t t-esc="o['status']"/>
-                                            </td>
+                                            <t t-if="length!=1">
+                                                <td>
+                                                    <t t-esc="o['status']"/>
+                                                </td>
+                                            </t>
                                         </tr>
                                         <t t-set="sl_no" t-value="sl_no+1"/>
                                     </t>
                                 </tbody>
                             </table>
+                            <div>
+
+                                <h4>Terms and condition</h4>
+                                <t t-foreach="data.get('report')" t-as="o">
+                                    <div>
+                                        <t t-esc="o['terms']"/>
+                                    </div>
+                                </t>
+
+                            </div>
                         </div>
 <!--                    </t>-->
                 </t>

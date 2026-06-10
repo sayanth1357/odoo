@@ -16,13 +16,15 @@ class RecurringSubscriptionCreditWizard(models.TransientModel):
    def action_credit_report(self):
 
 
-        query="""select rs.name as subscription ,rp.name as customer,rs.total_credit_applied as amount_applied,
-             (rs.recurring_amount-rs.total_credit_applied) as pending_amount, rsc.state from recurring_subscription_credit
-            rsc inner join recurring_subscription  rs on rsc.id=rs.id inner join res_partner  rp on
-            rp.id=rs.customer_id ;  """
+        query="""select rs.name as subscription ,rp.name as customer,rsc.credit_amount as amount_applied,
+             (rs.recurring_amount-rsc.credit_amount) as pending_amount, rsc.state from recurring_subscription_credit
+            rsc inner join recurring_subscription  rs on rsc.recurring_subscription_id=rs.id inner join res_partner  rp on
+            rp.id=rs.customer_id """
 
         if self.subscription_id:
-            query+="""where rs.name ='%s' """ % self.subscription_id.id
+            query+="""where rs.id ='%s' """ % self.subscription_id.id
+        if self.state:
+            query+="""where rsc.state='%s' """%self.state
 
         # # if self.subscription_id:
         # #     query += """where rs.id ='%s' """ % self.subscription_id.id
@@ -42,8 +44,25 @@ class RecurringSubscriptionCreditWizard(models.TransientModel):
 
         self.env.cr.execute(query)
         report = self.env.cr.dictfetchall()
-        data = {'report': report}
+
+        # name1 = []
+        # for record in report:
+        #     if record['name'] not in name1:
+        #         name1.append(record['name'])
+        # print(4567, name1)
+
+
+        state1 = []
+        for rec in report:
+            if rec['state'] not in state1:
+                state1.append(rec['state'])
+        print(state1)
+
+        data = {'report': report,'length':len(state1),'state':state1}
         print(9876,report)
         print(8876,data)
+
+
+
         return self.env.ref('recurring_subscription.action_report_recurring_subscription_credit_form').report_action(None, data=data)
 

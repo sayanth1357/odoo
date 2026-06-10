@@ -9,15 +9,22 @@
                             <div class="text-center">
                                 <h1> Subscription Credit Report</h1>
                             </div>
-                             <table class="table ">
+                            <t t-if="length==1">
+                                <div>
+                                    <h5>State: <span t-out="state[0]"/> </h5>
+                                </div>
+                            </t>
+                             <table class="table table-bordered mb64 ">
                                 <thead>
                                      <tr>
-                                         <th>SL.No</th>
-                                         <th>Subscription</th>
-                                         <th>Customer</th>
-                                         <th>Amount applied</th>
-                                         <th>Amount pending</th>
-                                         <th>State</th>
+                                         <th><strong>SL.No</strong></th>
+                                         <th><strong>Subscription</strong></th>
+                                         <th><strong>Customer</strong></th>
+                                         <th><strong>Amount applied</strong></th>
+                                         <th><strong>Amount pending</strong></th>
+                                         <t t-if="length!=1">
+                                            <th><strong>State</strong></th>
+                                         </t>
                                      </tr>
                                 </thead>
                                 <tbody>
@@ -39,9 +46,11 @@
                                             <td>
                                                 <t t-esc="credit['pending_amount']"/>
                                             </td>
-                                            <td>
-                                                <t t-esc="credit['state']"/>
-                                            </td>
+                                            <t t-if="length!=1">
+                                                <td>
+                                                    <t t-esc="credit['state']"/>
+                                                </td>
+                                            </t>
                                         </tr>
                                         <t t-set="sl_no" t-value="sl_no+1"/>
                                     </t>
