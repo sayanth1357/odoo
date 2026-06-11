@@ -25,6 +25,9 @@
         'data/mail_template_data.xml',
         'data/ir_cron_data.xml',
     ],
+    'assets': {
+        'web.assets_backend': ['recurring_subscription/static/src/js/action_manager.js']
+    },
 
 
     'installable':True,

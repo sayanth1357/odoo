@@ -16,8 +16,13 @@ class RecurringSubscriptionCreditWizard(models.TransientModel):
    def action_credit_report(self):
 
 
+        # query="""select rs.name as subscription ,rp.name as customer,rsc.credit_amount as amount_applied,
+        #      (rs.recurring_amount-rsc.credit_amount) as pending_amount, rsc.state from recurring_subscription_credit
+        #     rsc inner join recurring_subscription  rs on rsc.recurring_subscription_id=rs.id inner join res_partner  rp on
+        #     rp.id=rs.customer_id """
         query="""select rs.name as subscription ,rp.name as customer,rsc.credit_amount as amount_applied,
-             (rs.recurring_amount-rsc.credit_amount) as pending_amount, rsc.state from recurring_subscription_credit
+             (rs.recurring_amount-(select sum(rsc2.credit_amount) from recurring_subscription_credit rsc2  where
+            rsc2.recurring_subscription_id=rs.id and rsc2.id<=rsc.id)) as pending_amount, rsc.state from recurring_subscription_credit
             rsc inner join recurring_subscription  rs on rsc.recurring_subscription_id=rs.id inner join res_partner  rp on
             rp.id=rs.customer_id """
 
@@ -44,6 +49,7 @@ class RecurringSubscriptionCreditWizard(models.TransientModel):
 
         self.env.cr.execute(query)
         report = self.env.cr.dictfetchall()
+        print(report)
 
         # name1 = []
         # for record in report:
@@ -58,7 +64,9 @@ class RecurringSubscriptionCreditWizard(models.TransientModel):
                 state1.append(rec['state'])
         print(state1)
 
-        data = {'report': report,'length':len(state1),'state':state1}
+
+
+        data = {'report': report,'length':len(state1),'state':state1,}
         print(9876,report)
         print(8876,data)
 

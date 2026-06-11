@@ -2,6 +2,13 @@
 from datetime import timedelta
 
 from odoo import models, fields
+import io
+import json
+from odoo.tools import date_utils, json_default
+try:
+    from odoo.tools.misc import xlsxwriter
+except ImportError:
+    import xlsxwriter
 
 class RecurringSubscriptionWizard(models.TransientModel):
    _name = 'recurring.subscription.wizard'
@@ -27,7 +34,7 @@ class RecurringSubscriptionWizard(models.TransientModel):
 		# 		where 1=1
 		# 		"""
         # print(query)
-        query = """select rs.name, rp.name as customer ,rs.total_credit_applied ,rs.terms_and_condition as terms ,pt.name->>'en_US' as product , rs.recurring_amount ,rs.status
+        query = """select rs.name, rp.name as customer ,rs.total_credit_applied ,rs.terms_and_condition as term ,pt.name->>'en_US' as product , rs.recurring_amount ,rs.status
                          from recurring_subscription  rs inner join res_partner  rp on rp.id = rs.customer_id inner join
         		 		product_template  pt on pt.id=rs.product_id
         		 		where 1=1
@@ -67,14 +74,101 @@ class RecurringSubscriptionWizard(models.TransientModel):
                 name1.append(record['name'])
         print(4567,name1)
 
-        data = {'report': report,'length':len(sub),'subs':sub,'name_len':len(name1),'subname':name1 }
+        terms=False
+        if self.subscription_id:
+            terms=self.subscription_id.terms_and_condition
+            print(terms)
+
+        data = {'report': report,'length':len(sub),'subs':sub,'name_len':len(name1),'subname':name1,'term':terms, }
 
         print("5432",data)
-
-
 
         return self.env.ref('recurring_subscription.action_report_recurring_subscription_form').report_action(None,data=data)
 
 
 
+   def action_print_xlsx(self):
+       """
+       Returns report action for the XLSX Attendance report
+       Raises: ValidationError: if From Date > To Date
+       Raises: ValidationError: if there is no attendance records
+       Returns:
+           dict:  the XLSX report action
+       """
 
+       subscriptions = self.env['recurring.subscription'].search(
+           [('id', 'in', self.subscription_id.ids)])
+       data = {
+           'subscription_id': self.subscription_id.id,
+           'report': self.report,
+       }
+       print(data)
+       if self:
+           return {
+               'type': 'ir.actions.report',
+               'data': {'model': 'recurring.subscription.wizard',
+                        'options': json.dumps(data, default=json_default),
+                        'output_format': 'xlsx',
+                        'report_name': 'Attendance Report',
+                        },
+               'report_type': 'xlsx',
+           }
+
+
+   def get_xlsx_report(self, data, response):
+       """
+       Print the XLSX report
+       Returns: None
+       """
+       query = """select rs.name, rp.name as customer ,rs.total_credit_applied ,rs.terms_and_condition as term ,
+                                pt.name->>'en_US' as product , rs.recurring_amount ,rs.status
+                                from recurring_subscription  rs inner join res_partner  rp on rp.id = rs.customer_id inner join
+                                product_template  pt on pt.id=rs.product_id
+                                where 1=1
+               		 		"""
+       if self.subscription_id:
+           query += """and rs.id ='%s' """ % self.subscription_id.id
+
+       today = fields.Date.today()
+       if self.report == 'daily':
+           query += """and  rs.date >= '%s' """ % today
+       elif self.report == 'weekly':
+           query += """and rs.date >= '%s' """ % (today - timedelta(days=7))
+       elif self.report == 'monthly':
+           query += """and rs.date >= '%s' """ % (today - timedelta(days=30))
+       elif self.report == 'yearly':
+           query += """and rs.date >= '%s' """ % (today - timedelta(days=365))
+       if self.partner_id:
+           query += """and rp.id='%s' """ % self.partner_id.id
+
+       self.env.cr.execute(query)
+       report = self.env.cr.dictfetchall()
+       data = {'report': report, }
+       print(report)
+       print(data)
+
+       output = io.BytesIO()
+       workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+       sheet = workbook.add_worksheet()
+       cell_format = workbook.add_format(
+           {'font_size': '9px', 'align': 'center'})
+       head = workbook.add_format(
+           {'align': 'center', 'bold': True, 'font_size': '20px'})
+       txt = workbook.add_format({'font_size': '10px', 'align': 'center'})
+       sheet.write('B2:I3', 'SUBSCRIPTION REPORT', head)
+       # sheet.merge_range('B5:C5', 'SL.No:', cell_format)
+       # sheet.merge_range('B6:C6', data['SL.No'], txt)
+       sheet.write('B6:B6', 'Subscription', cell_format)
+       sheet.write('B7:B7', data.get(report['subscription']), cell_format)
+       sheet.write('C6:C6', 'Customer', cell_format)
+       # sheet.merge_range('C6:D6', data['customer'], cell_format)
+       sheet.merge_range('D6:D6', 'Product', cell_format)
+       # sheet.merge_range('C7:D7', data['product'], cell_format)
+       # sheet.merge_range('A8:B8', 'Amount', cell_format)
+       # sheet.merge_range('C8:D8', data['recurring_amount'], cell_format)
+       # sheet.merge_range('A5:B5', 'Total credit amount', cell_format)
+       # sheet.merge_range('C5:D5', data['total_credit_applied'], cell_format)
+       workbook.close()
+       output.seek(0)
+       response.stream.write(output.read())
+       output.close()

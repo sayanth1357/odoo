@@ -14,6 +14,7 @@
                                     <h5>State: <span t-out="state[0]"/> </h5>
                                 </div>
                             </t>
+
                              <table class="table table-bordered mb64 ">
                                 <thead>
                                      <tr>
