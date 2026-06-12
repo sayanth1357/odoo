@@ -19,7 +19,7 @@
                    </group>
                    <footer>
                        <button string="Print PDF" name="action_credit_report" type="object"  class="btn-primary"/>
-                       <button string="Print XLSX"  type="object"  class="btn-primary"/>
+                       <button string="Print XLSX"  name="action_credit_xlsx" type="object"  class="btn-primary"/>
                        <button string="Cancel"  type="object" special="cancel"/>
                    </footer>
                </form>

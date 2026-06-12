@@ -96,15 +96,12 @@ class RecurringSubscriptionWizard(models.TransientModel):
            dict:  the XLSX report action
        """
 
-       subscriptions = self.env['recurring.subscription'].search(
-           [('id', 'in', self.subscription_id.ids)])
+
        data = {
            'subscription_id': self.subscription_id.id,
            'report': self.report,
        }
-       print(data)
-       if self:
-           return {
+       return {
                'type': 'ir.actions.report',
                'data': {'model': 'recurring.subscription.wizard',
                         'options': json.dumps(data, default=json_default),
@@ -120,54 +117,63 @@ class RecurringSubscriptionWizard(models.TransientModel):
        Print the XLSX report
        Returns: None
        """
+
        query = """select rs.name, rp.name as customer ,rs.total_credit_applied ,rs.terms_and_condition as term ,
                                 pt.name->>'en_US' as product , rs.recurring_amount ,rs.status
                                 from recurring_subscription  rs inner join res_partner  rp on rp.id = rs.customer_id inner join
                                 product_template  pt on pt.id=rs.product_id
                                 where 1=1
                		 		"""
-       if self.subscription_id:
-           query += """and rs.id ='%s' """ % self.subscription_id.id
+       if data.get('subscription_id'):
+           query += """and rs.id ='%s' """ % data.get('subscription_id')
 
        today = fields.Date.today()
-       if self.report == 'daily':
+       if data.get('report') == 'daily':
            query += """and  rs.date >= '%s' """ % today
-       elif self.report == 'weekly':
+       elif data.get('report') == 'weekly':
            query += """and rs.date >= '%s' """ % (today - timedelta(days=7))
-       elif self.report == 'monthly':
+       elif data.get('report') == 'monthly':
            query += """and rs.date >= '%s' """ % (today - timedelta(days=30))
-       elif self.report == 'yearly':
+       elif data.get('report') == 'yearly':
            query += """and rs.date >= '%s' """ % (today - timedelta(days=365))
-       if self.partner_id:
-           query += """and rp.id='%s' """ % self.partner_id.id
+       # if data.get('report'):
+       #     query += """and rp.id='%s' """ % self.partner_id.id
 
        self.env.cr.execute(query)
-       report = self.env.cr.dictfetchall()
-       data = {'report': report, }
-       print(report)
+       docs = self.env.cr.dictfetchall()
        print(data)
 
        output = io.BytesIO()
        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
        sheet = workbook.add_worksheet()
-       cell_format = workbook.add_format(
-           {'font_size': '9px', 'align': 'center'})
        head = workbook.add_format(
-           {'align': 'center', 'bold': True, 'font_size': '20px'})
-       txt = workbook.add_format({'font_size': '10px', 'align': 'center'})
-       sheet.write('B2:I3', 'SUBSCRIPTION REPORT', head)
-       # sheet.merge_range('B5:C5', 'SL.No:', cell_format)
-       # sheet.merge_range('B6:C6', data['SL.No'], txt)
-       sheet.write('B6:B6', 'Subscription', cell_format)
-       sheet.write('B7:B7', data.get(report['subscription']), cell_format)
-       sheet.write('C6:C6', 'Customer', cell_format)
-       # sheet.merge_range('C6:D6', data['customer'], cell_format)
-       sheet.merge_range('D6:D6', 'Product', cell_format)
-       # sheet.merge_range('C7:D7', data['product'], cell_format)
-       # sheet.merge_range('A8:B8', 'Amount', cell_format)
-       # sheet.merge_range('C8:D8', data['recurring_amount'], cell_format)
-       # sheet.merge_range('A5:B5', 'Total credit amount', cell_format)
-       # sheet.merge_range('C5:D5', data['total_credit_applied'], cell_format)
+           { 'bold': True, 'border':1,'align':'centre'})
+       border = workbook.add_format({'border': 1})
+       sheet.set_column(3, 1, 15)
+       sheet.set_column(4, 1, 25)
+       sheet.set_column(6, 1, 25)
+
+       sheet.merge_range('A2:G3', 'Subscription Report', head)
+       sheet.write('A5','SL.No',head)
+       sheet.write('B5', 'Name',head)
+       sheet.write('C5', 'Customer',head)
+       sheet.write('D5', 'Product',head)
+       sheet.write('E5', 'Amount ',head)
+       sheet.write('F5', 'Total credit applied ',head)
+       sheet.write('G5', 'Status ',head)
+
+       row=5
+       sl_no=1
+       for record in docs:
+           sheet.write(row,0,sl_no,border)
+           sheet.write(row,1,record['name'],border)
+           sheet.write(row,2,record['customer'],border)
+           sheet.write(row,3,record['product'],border)
+           sheet.write(row,4,record['recurring_amount'],border)
+           sheet.write(row,5,record['total_credit_applied'],border)
+           sheet.write(row,6,record['status'],border)
+           row+=1
+           sl_no+=1
        workbook.close()
        output.seek(0)
        response.stream.write(output.read())
