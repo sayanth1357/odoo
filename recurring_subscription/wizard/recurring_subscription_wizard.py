@@ -3,6 +3,8 @@ from datetime import timedelta
 from odoo import models, fields
 import io
 import json
+
+from odoo.exceptions import ValidationError
 from odoo.tools import date_utils, json_default
 try:
     from odoo.tools.misc import xlsxwriter
@@ -25,11 +27,11 @@ class RecurringSubscriptionWizard(models.TransientModel):
 
    def action_report_subscription(self):
 
-        query = """select rs.name, rp.name as customer ,rs.total_credit_applied ,rs.terms_and_condition as term ,pt.name->>'en_US' as product , rs.recurring_amount ,rs.status
-                         from recurring_subscription  rs inner join res_partner  rp on rp.id = rs.customer_id inner join
-        		 		product_template  pt on pt.id=rs.product_id
-        		 		where 1=1	
-        		 		"""
+        query = """select rs.name, rp.name as customer ,rs.total_credit_applied ,rs.terms_and_condition as term ,
+                   pt.name->>'en_US' as product , rs.recurring_amount ,rs.status from recurring_subscription  rs 
+                   inner join res_partner  rp on rp.id = rs.customer_id inner join product_template  pt on pt.id=rs.product_id
+        		   where 1=1	
+        		"""
 
         if self.subscription_id:
             query+="""and rs.id ='%s' """ % self.subscription_id.id
@@ -48,7 +50,9 @@ class RecurringSubscriptionWizard(models.TransientModel):
         elif self.report=='yearly':
             query+="""and rs.date >= '%s' """%(today-timedelta(days=365))
 
-
+        for rec in self:
+            if rec.from_date>today:
+                    raise ValidationError('From date cannot be more than todays date')
 
         self.env.cr.execute(query)
         report = self.env.cr.dictfetchall()
@@ -70,7 +74,9 @@ class RecurringSubscriptionWizard(models.TransientModel):
             terms=self.subscription_id.terms_and_condition
             print(terms)
 
-        data = {'report': report,'length':len(sub),'subs':sub,'name_len':len(name1),'subname':name1,'term':terms, }
+        data = {'report': report,'length':len(sub),'subs':sub,'name_len':len(name1),'subname':name1,'term':terms,
+                'from_date':self.from_date,'to_date':self.to_date }
+
 
         print("5432",data)
 
@@ -131,6 +137,7 @@ class RecurringSubscriptionWizard(models.TransientModel):
            query += """and rs.date >= '%s' """ % (today - timedelta(days=365))
 
 
+
        self.env.cr.execute(query)
        docs = self.env.cr.dictfetchall()
        print(data)
@@ -141,7 +148,7 @@ class RecurringSubscriptionWizard(models.TransientModel):
        head = workbook.add_format(
            { 'bold': True, 'border':1,'align':'centre'})
        border = workbook.add_format({'border': 1})
-       
+
 
        status_list=[]
        for rec in docs:
@@ -157,7 +164,12 @@ class RecurringSubscriptionWizard(models.TransientModel):
        sheet.set_column(4, 1, 20)
        sheet.set_column(6, 1, 20)
 
-       sheet.merge_range('A2:G3', 'Subscription Report', head)
+       sheet.merge_range('A2:G2', 'Subscription Report', head)
+
+       if data.get('from_date') and data.get('to_date'):
+           sheet.merge_range('A6:B6','From:'+data.get('from_date'))
+           sheet.merge_range('C6:E6','To:'+data.get('to_date'))
+
        if len(sub_list)==1:
            sheet.merge_range('A4:B4','Name',head)
            sheet.write('C4',sub_list[0],border)

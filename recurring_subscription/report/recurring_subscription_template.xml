@@ -20,7 +20,10 @@
                                     </div>
                             </t>
 
-                            
+                            <t t-if="data.get('from_date') and data.get('to_date')">
+                                <h6>from:<span t-esc="data.get('from_date')"/>  </h6>
+                                <h6>To: <span t-esc="data.get('to_date')"/>  </h6>
+                            </t>
 
 
                              <table class="table table-bordered mb64">
