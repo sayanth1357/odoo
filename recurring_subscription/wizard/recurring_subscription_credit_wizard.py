@@ -94,12 +94,12 @@ class RecurringSubscriptionCreditWizard(models.TransientModel):
                    (rs.recurring_amount-(select sum(rsc2.credit_amount) from recurring_subscription_credit rsc2  where
                   rsc2.recurring_subscription_id=rs.id and rsc2.id<=rsc.id)) as pending_amount, rsc.state from recurring_subscription_credit
                   rsc inner join recurring_subscription  rs on rsc.recurring_subscription_id=rs.id inner join res_partner  rp on
-                  rp.id=rs.customer_id """
+                  rp.id=rs.customer_id  where 1=1"""
 
        if data.get('subscription_id'):
-           query += """where rs.id ='%s' """ % data.get('subscription_id')
+           query += """and rs.id ='%s' """ % data.get('subscription_id')
        if data.get('state'):
-           query += """where rsc.state='%s' """ % data.get('state')
+           query += """and rsc.state='%s' """ % data.get('state')
 
        self.env.cr.execute(query)
        docs = self.env.cr.dictfetchall()
@@ -110,22 +110,64 @@ class RecurringSubscriptionCreditWizard(models.TransientModel):
        sheet = workbook.add_worksheet()
        head = workbook.add_format(
            {'bold': True, 'border': 1,'align':'center'})
-       sheet.write('A5', 'SL.No', head)
-       sheet.write('B5', 'Subscription', head)
-       sheet.write('C5', 'Customer', head)
-       sheet.write('D5', 'Amount applied', head)
-       sheet.write('E5', 'Amount pending', head)
-       sheet.merge_range('F5:G5', 'State ', head)
+       border = workbook.add_format({'border': 1})
+       sub1 = []
+       for rec in docs:
+           if rec['subscription'] not in sub1:
+               sub1.append(rec['subscription'])
 
-       row = 5
+       state1 = []
+       for rec in docs:
+           if rec['state'] not in state1:
+               state1.append(rec['state'])
+
+       sheet.set_column(3, 1, 15)
+       sheet.set_column(4, 1, 25)
+       sheet.set_column(6, 1, 15)
+       sheet.merge_range('A2:E3', 'Credit Report', head)
+       # sheet.merge_range('A2:G3', 'Subscription Report', head)
+       if len(sub1) == 1:
+           sheet.merge_range('A4:B4', 'Subscription', head)
+           sheet.write('C4', sub1[0], border)
+
+       if len(state1) == 1:
+           sheet.merge_range('A5:B5', 'Status', head)
+           sheet.write('C5', state1[0], border)
+
+       row=6
+       col=0
+       sheet.write(row,col, 'SL.No', head)
+       col+=1
+       if len(sub1)!=1:
+           sheet.write(row,col, 'Subscription', head)
+           col += 1
+       sheet.write(row,col, 'Customer', head)
+       col += 1
+       sheet.write(row,col, 'Amount applied', head)
+       col += 1
+       sheet.write(row,col, 'Amount pending', head)
+       col+=1
+       if len(state1)!=1:
+        sheet.write(row,col, 'State ', head)
+
+
+       row = 7
        sl_no = 1
        for record in docs:
-           sheet.write(row, 0, sl_no)
-           sheet.write(row, 1, record['subscription'])
-           sheet.write(row, 2, record['customer'])
-           sheet.write(row, 3, record['amount_applied'])
-           sheet.write(row, 4, record['pending_amount'])
-           sheet.write(row, 5, record['state'])
+           col=0
+           sheet.write(row, col, sl_no,border)
+           col+=1
+           if len(sub1)!=1:
+               sheet.write(row, col, record['subscription'],border)
+               col += 1
+           sheet.write(row, col, record['customer'],border)
+           col += 1
+           sheet.write(row, col, record['amount_applied'],border)
+           col += 1
+           sheet.write(row, col, record['pending_amount'],border)
+           col += 1
+           if len(state1)!=1:
+                sheet.write(row, col, record['state'],border)
            row += 1
            sl_no += 1
        workbook.close()

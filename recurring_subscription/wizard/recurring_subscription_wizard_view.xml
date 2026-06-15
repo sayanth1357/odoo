@@ -16,7 +16,8 @@
                    <group>
                        <field name="subscription_id"/>
                        <field name="report"/>
-                       <field name="partner_id"/>
+                       <field name="from_date" invisible="report != 'custom'"/>
+                       <field name="to_date" invisible="report != 'custom'"/>
                    </group>
                    <footer>
                        <button string="Print PDF" name="action_report_subscription" type="object"  class="btn-primary"/>
