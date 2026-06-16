@@ -15,25 +15,19 @@ class PurchaseOrder(models.Model):
     #
     def action_product_btn(self):
         print(self)
-        # for rec in self:
+        for product in self.bulk_product_ids:
+            # for rec in self.order_line:
+            #     if rec.product_id == product.product_variant_id.id:
+            #        rec.product_qty+=self.quantity
+            line=self.order_line.filtered(lambda x:x.product_id.id==product.product_variant_id.id)
+            print(1222,line)
+            if line:
+                line.product_qty+=self.quantity
+            else:
+                self.order_line = [(Command.create({
+                        'product_id':product.product_variant_id.id,
+                        'product_qty':self.quantity,
+                    }))]
 
-        if self.bulk_product_ids and self.quantity :
-               print(self.bulk_product_ids)
-               print(654,self.quantity)
-               print(321,self.id)
-               for line in self.bulk_product_ids:
-                   print(432,line)
-                   self.env['purchase.order.line'].create({
-                       'order_id': self.id,
-                       'product_id': line.product_variant_id.id,
-                       'product_qty': self.quantity,
-                   #     # 'order_line':[Command.create({
-                   #     #             'product_id': rec.bulk_product_ids,
-                   #     #             'product_qty': rec.quantity,
+          
 
-                       # })]
-
-                    })
-
-               print(self.bulk_product_ids)
-               print(self.quantity)
