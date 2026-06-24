@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="partner_list_views" model="ir.ui.view">
+        <field name="name">partner</field>
+        <field name="model">partner.partner</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="partner_id"/>
+                <field name="property_name"/>
+                <field name="state"/>
+                <field name="state_type"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+        <record id="view_property_record_wizard_form" model="ir.ui.view">
+           <field name="name">property.record.wizard.form</field>
+           <field name="model">property.report</field>
+           <field name="arch" type="xml">
+               <form string="Property Report">
+                   <sheet>
+                       <group>
+                           <group>
+                                <field name="property_id"/>
+                           </group>
+                           <group>
+                                <field name="property_name"/>
+                                <field name="owner_name"/>
+                           </group>
+                       </group>
+                       <hr></hr>
+                       <group>
+                                   <field name="tenant_id"/>
+                       </group>
+                       <group>
+
+                               <group>
+                                   <field name="from_date"/>
+                               </group>
+                               <group>
+                                   <field name="to_date"/>
+                               </group>
+                               <group>
+                                   <field name="state_type"/>
+                               </group>
+                               <group>
+                                   <field name="state"/>
+                               </group>
+                       </group>
+                           <footer>
+                                <button name="action_report_property_management"
+                                class="oe_highlight"
+                                type="object"
+                                string="PDF Print"
+                                />
+                           </footer>
+                   </sheet>
+
+               </form>
+           </field>
+   </record>
+</odoo>

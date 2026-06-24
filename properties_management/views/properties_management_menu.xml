@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="property_action" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="res_model">properties.management</field>
+        <field name="view_mode">kanban</field>
+    </record>
+    <record id="property_management_action" model="ir.actions.act_window">
+        <field name="name">Property Management</field>
+        <field name="res_model">properties.management</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="lease_or_rental_action" model="ir.actions.act_window">
+        <field name="name">Lease or Rental Management</field>
+        <field name="res_model">rental.lease.management</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="facilities_action" model="ir.actions.act_window">
+        <field name="name">Facilities Management</field>
+        <field name="res_model">facilities.facilities</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="rental_lease_property_action" model="ir.actions.act_window">
+        <field name="name">Leased/Rental Management</field>
+        <field name="res_model">rental.lease.management</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="rental_lease_record_action" model="ir.actions.act_window">
+        <field name="name">Leased/Rental Record</field>
+        <field name="res_model">rent.lease.record</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="property_owner_record_action" model="ir.actions.act_window">
+        <field name="name">Owner Record</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="property_report_action" model="ir.actions.act_window">
+        <field name="name">PDF Property Report</field>
+        <field name="res_model">property.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <record id="property_xlsx_report_action" model="ir.actions.act_window">
+        <field name="name">XLSX Property Report</field>
+        <field name="res_model">property.report.xlsx</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_properties" name="Properties" action="property_action"/>'
+    <menuitem id="menu_configuration" parent="menu_properties" sequence="4" name="Configuration"/>
+    <menuitem id="menu_reporting" parent="menu_properties" sequence="3" name="Reporting"/>
+    <menuitem id="menu_pdf_report" name="Pdf report" parent="menu_reporting" sequence="0" action="property_report_action"/>
+    <menuitem id="menu_xlsx_report" name="Xlsx report" parent="menu_reporting" sequence="1" action="property_xlsx_report_action"/>
+    <menuitem id="menu_property_management" parent="menu_configuration" sequence="0" action="property_management_action"/>
+    <menuitem id="menu_lease_or_rental" parent="menu_properties" sequence="1" action="lease_or_rental_action"/>
+    <menuitem id="facilities_management" parent="menu_configuration" sequence="1" action="facilities_action"/>
+    <menuitem id="rental_lease_property" parent="menu_lease_or_rental" sequence="0" action="rental_lease_property_action"/>
+    <menuitem id="menu_owner" parent="menu_properties" name="Property Owner" sequence="2" action="property_owner_record_action"/>
+</odoo>

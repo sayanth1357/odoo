@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id = "PR00005" model="properties.management">
+            <field name="name">PR00005</field>
+            <field name="property_name">Estate Building</field>
+
+        </record>
+        <record id = "PR00006" model="properties.management">
+            <field name="name">PR00006</field>
+            <field name="property_name">Residential</field>
+
+        </record>
+         <record id = "PR00007" model="properties.management">
+            <field name="name">PR00007</field>
+            <field name="property_name">Hotel New</field>
+
+        </record>
+    </data>
+</odoo>

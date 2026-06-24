@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="account_move_property" model="ir.ui.view">
+        <field name="model">account.move.form.inherit</field>
+        <field name="inherit_id" ref="account.move"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@id='header_left_group']" position="inside">
+                <field name="rental_time"/>
+                <field name="leased_time"/>
+                <field name="rental_amount"/>
+                <field name="lease_amount"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="property_demo_1" model="properties.management">
+            <field name="name">New</field>
+            <field name="property_name">Prop 1</field>
+        </record>
+        <record id="property_demo_2" model="properties.management">
+            <field name="name">New</field>
+            <field name="property_name">Prop 2</field>
+        </record>
+    </data>
+</odoo>

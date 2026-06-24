@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="paperformat_A3_property_report"  model="report.paperformat">
+        <field name="name">Property Report</field>
+        <field name="default" eval="True" />
+        <field name="format">A3</field>
+        <field name="dpi">200</field>
+    </record>
+    <record id="action_property_report" model="ir.actions.report">
+        <field name="name">Property Report</field>
+        <field name="model">property.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">properties_management.property_report</field>
+        <field name="report_file">properties_management.property_report</field>
+        <field name="paperformat_id" ref="paperformat_A3_property_report"/>
+        <field name="print_report_name">'Property Report'</field>
+    </record>
+
+    <record id="action_property_only_report" model="ir.actions.report">
+        <field name="name">Property Report</field>
+        <field name="model">property.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">properties_management.property_only_report</field>
+        <field name="report_file">properties_management.property_only_report</field>
+        <field name="paperformat_id" ref="paperformat_A3_property_report"/>
+        <field name="print_report_name">'Property Report'</field>
+    </record>
+
+
+</odoo>

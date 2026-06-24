@@ -1,0 +1,9 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_facilities_owner,access.facilities.management,model_facilities_facilities,base.group_user,1,1,1,1
+access_record_owner,access.records.management,model_rent_lease_record,base.group_user,1,1,1,1
+access_property_user,access.properties.management,model_properties_management,properties_management.group_property_user,1,1,0,0
+access_property_manager,access.properties.management,model_properties_management,properties_management.group_property_manager,1,1,1,1
+access_rent_user,access.rental.lease.management,model_rental_lease_management,properties_management.group_rent_lease_user,1,1,1,0
+access_rent_manager,access.rental.lease.management,model_rental_lease_management,properties_management.group_rent_lease_manager,1,1,1,1
+access_wizard_pdf_user,access.property.report,model_property_report,base.group_user,1,1,1,1
+access_wizard_xlsx_user,access.property.report.xlsx,model_property_report_xlsx,base.group_user,1,1,1,1

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="property_confirmation_mail" model="mail.template">
+            <field name="name">Property Confirmation</field>
+            <field name="model_id" ref="properties_management.model_rental_lease_management"/>
+            <field name="subject">Property Confirmed ! - {{ object.rent_ids.property_name }}</field>
+            <field name="email_from">
+                {{ user.email_formatted or user.company_id.email_formatted }}
+            </field>
+            <field name="email_to">{{ object.tenant_id.id}}</field>
+            <field name="partner_to">{{object.tenant_id.id}}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>
+                        Hello <t t-out="object.tenant_id.name"/>,
+                        <br/>
+                        <br/>
+                        This mail is to notify that you have confirmed your purchase of property -<t
+                            t-out="object.rent_ids.property_name"/>.
+                        Congrats on your purchase!
+                        <br/>
+                        <br/>
+                        Mitchell Admin
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="property_closing_mail" model="mail.template">
+            <field name="name">Property Purchase Closing</field>
+            <field name="model_id" ref="properties_management.model_rental_lease_management"/>
+            <field name="subject">Purchase Closed ! - for the Property {{ object.rent_ids.property_name }}</field>
+            <field name="email_from">
+                {{ user.email_formatted or user.company_id.email_formatted }}
+            </field>
+            <field name="email_to">{{ object.tenant_id.id}}</field>
+            <field name="partner_to">{{object.tenant_id.id}}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>
+                        Hello <t t-out="object.tenant_id.name"/>,
+                        <br/>
+                        <br/>
+                        This mail is to notify that the ownership of the Property -
+                        <t t-out="object.rent_ids.property_name"/>
+                        has successfully been transferred to you.
+                        Congrats on your purchase!
+                        <br/>
+                        <br/>
+                        Mitchell Admin
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="property_expired_mail" model="mail.template">
+            <field name="name">Property rent/lease Expired</field>
+            <field name="model_id" ref="properties_management.model_rental_lease_management"/>
+            <field name="subject">Eviction Notice - The {{object.rent_ids.state_type}} duration mentioned in the agreement for the property {{object.rent_ids.property_name}} Expires Today !</field>
+            <field name="email_from">{{user.email_formatted or user.company_id.email_formatted}}</field>
+            <field name="email_to">{{object.tenant_id.id}}</field>
+            <field name="partner_to">{{object.tenant_id.id}}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>
+                        Hello <t t-out="object.tenant_id.name"/>,
+                        <br/>
+                        <br/>
+                        This mail is to notify that you have to vacate from the property -
+                        <t t-out="object.rent_ids.property_name"/>, as the
+                        <t t-out="object.rent_ids.state_type"/>
+                        duration mentioned in the agreement has expired.
+                        Please vacate the premises as ASAP.
+                        <br/>
+                        <br/>
+                        Mitchell Admin
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="property_late_payment_mail" model="mail.template">
+            <field name="name">Property rent/lease Late Payment</field>
+            <field name="model_id" ref="properties_management.model_rental_lease_management"/>
+            <field name="subject">Late Payment Notice - The Payment for {{object.rent_ids.state_type}} property {{object.rent_ids.property_name}} Pending !</field>
+            <field name="email_from">{{user.email_formatted or user.company_id.email_formatted}}</field>
+            <field name="email_to">{{object.tenant_id.id}}</field>
+            <field name="partner_to">{{object.tenant_id.id}}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>
+                        Hello <t t-out="object.tenant_id.name"/>,
+                        <br/>
+                        <br/>
+                        This mail is to notify that you haven't yet paid for the property -
+                        <t t-out="object.rent_ids.property_name"/>. The payment
+                        <t t-out="object.rent_ids.state_type"/>
+                        property was supposed to be paid on or before rental time agreed upon in the agreement.
+                        <br/>
+                        <br/>
+                        Mitchell Admin
+                    </p>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

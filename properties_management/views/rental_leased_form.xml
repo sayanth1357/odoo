@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="rental_leased_views" model="ir.ui.view">
+        <field name="name">Rental/Leased Properties</field>
+        <field name="model">rental.lease.management</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="reference_id"/>
+                <field name="property_id"/>
+                <field name="state_type"/>
+                <field name="state"/>
+                <field name="approval_state" widget="badge"
+                groups="properties_management.group_rent_lease_manager"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_rental_leased_management_form_" model="ir.ui.view">
+        <field name="name">rental_leased_form</field>
+        <field name="model">rental.lease.management</field>
+        <field name="arch" type="xml">
+            <form>
+
+
+                <header>
+
+                    <button name="button_confirm" class="oe_highlight" state="Confirmed"
+                            string="Confirm" type="object" help="Move Appointment to Confirmed state"
+                            invisible="state != 'Draft' or approval_state == 'To Approve'"
+                            groups="properties_management.group_rent_lease_manager"/>
+                    <button name="button_closed" class="oe_highlight" state="Closed"
+                            string="Closed" type="object" help="Move Appointment to Closed state"
+                            invisible="state != 'Invoiced'"
+                            groups="properties_management.group_rent_lease_manager"/>
+                    <button name="button_returned" class="oe_highlight" state="Returned"
+                            string="Returned" type="object" invisible="state != 'Confirmed'" help="Move Appointment to returned state"
+                            groups="properties_management.group_rent_lease_manager"/>
+                    <button name="button_expired" class="oe_highlight" state="Expired"
+                            string="Expired" type="object" help="Move Appointment to expired state"
+                            invisible="state != 'Closed'"
+                            groups="properties_management.group_rent_lease_manager"/>
+                    <button string="Create Invoice" name="action_button_invoice" type="object" class="btn-primary"
+                             invisible="state != 'Confirmed'" tracking="True"
+                             groups="properties_management.group_rent_lease_manager"/>
+                    <field name="approval_state" widget="statusbar"
+                            invisible="approval_state =='Approved'"/>
+
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"
+                           invisible="approval_state !='Approved'"
+                           groups="properties_management.group_rent_lease_manager"/>
+                    <button name="submit_approval_button" class="oe_highlight"
+                            string="Submit Request" type="object" help="creates a approval request"
+                             groups="properties_management.group_rent_lease_user"
+                            invisible="approval_state=='To Approve'"/>
+                    <button name="approved_button" class="oe_highlight"
+                            string="Approve" type="object" help="creates a approval request"
+                            groups="properties_management.group_rent_lease_manager"
+                            invisible="approval_state!='To Approve'"/>
+                    <button name="reject_button" class="oe_highlight"
+                            string="Reject" type="object" help="creates a approval request"
+                            groups="properties_management.group_rent_lease_manager"
+                            invisible="approval_state!='To Approve'"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                            <button name="action_view_invoice_info"
+                               type="object"
+                               class="oe_stat_button"
+                               icon="fa-pencil-square-o">
+                                <field name="invoice_count" widget="statinfo" string="Invoice Info"/>
+                            </button>
+                    </div>
+
+                    <widget name="web_ribbon" title="Not Paid"
+                                    bg_color="text-bg-danger"
+                                    invisible="payment_state != 'not_paid'"/>
+                    <widget name="web_ribbon" title="Paid"
+                                    bg_color="text-bg-success"
+                                    invisible="payment_state != 'paid'"/>
+
+
+                    <h1>
+                        <field name="reference_id"/>
+                    </h1>
+                    <group>
+                        <field name="tenant_id" force_save="1"/>
+                        <field name="company_id"/>
+                        <field name="attachment_id"/>
+                        <field name="active"/>
+                    </group>
+                    <notebook>
+                        <page string="Properties_line">
+                            <list>
+                                <field name="rent_ids"/>
+                            </list>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="rent_lease_filter" model="ir.ui.view">
+        <field name="name">Rental Leased Filter</field>
+        <field name="model">rental.lease.management</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="Type" string="Draft"
+                        domain="[('state', '=', 'Draft')]"/>
+                <filter name="Type" string="Confirmed"
+                        domain="[('state', '=', 'Confirmed')]"/>
+                <filter name="Type" string="Closed"
+                        domain="[('state', '=', 'Closed')]"/>
+                <filter name="Type" string="Returned"
+                        domain="[('state', '=', 'Returned')]"/>
+                <filter name="Type" string="Expired"
+                        domain="[('state', '=', 'Expired')]"/>
+                <filter string="Archived"
+                        domain="[('active','=',False)]"
+                        name="Archive"/>
+                <group name="groupby">
+                    <filter name="groupby_stage" string="Stage"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

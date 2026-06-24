@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="property_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <h2 class="text-center">Property Report</h2>
+                    <br></br>
+                    <table class="table table-bordered table-sm">
+                        <thead class="table-primary">
+                            <tr>
+                                <b><th>Property</th></b>
+                                <b><th>Owner Name</th></b>
+                                <b><th>Tenant</th></b>
+                                <b><th>Start</th></b>
+                                <b><th>End</th></b>
+                                <b><th>Type</th></b>
+                                <b><th>State</th></b>
+                                <b><th>Amount</th></b>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data['report']" t-as="o">
+                                <tr>
+                                    <td><span t-esc="o['p_name']"/></td>
+                                    <td><span t-esc="o['o_id']"/></td>
+                                    <td><span t-esc="o['t_id']"/></td>
+                                    <td><span t-esc="o['from_date']"/></td>
+                                    <td><span t-esc="o['to_date']"/></td>
+                                    <td><span t-esc="o['state_type']"/></td>
+                                    <td><span t-esc="o['state']"/></td>
+                                    <td><span t-esc="o['total_amount']"/></td>
+
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

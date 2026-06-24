@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+   <odoo>
+    <record id="view_property_management_form" model="ir.ui.view">
+        <field name="name">property_form</field>
+        <field name="model">properties.management</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name = 'state' widget="statusbar"
+                options="{'clickable': '1'}"/>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                            <button name="action_rental_lease"
+                               type="object"
+                               class="oe_stat_button"
+                               icon="fa-home">
+                                <field name="property_name" widget="statinfo" string="Rental/Lease Info"/>
+                            </button>
+                    </div>
+                    <h1>
+                       <field name="name"/>
+                    </h1>
+                    <h2>
+                        <field name="property_name" placeholder="Property Name"/>
+                    </h2>
+                    <group>
+                        <group>
+                            <field name="owner_id" widget="res_partner_many2one"
+                                    context="{'show_address': 1}"
+                                    options='{"always_reload": True}'/>
+                        </group>
+                        <group>
+                            <field name="property_image" widget="contact_image"/>
+                        </group>
+                        <group>
+                            <field name="facilities_ids" widget="many2many_tags" placeholder="Property Facilities"/>
+                        </group>
+                        <group>
+                            <span><strong>Address</strong></span>
+                            <div>
+                                <field name="street_address" placeholder="Street Address"/>
+                                <field name="city" placeholder="City"/>
+                               <span>
+                                   <field name="state_id" placeholder="State"/>
+                                   <field name="zip_code" placeholder="Zip Code"/>
+                               </span>
+                                <field name="country_id" placeholder="Country"/>
+
+                            </div>
+                        </group>
+                    </group>
+                    <hr/>
+                    <group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name='build_date'/>
+                            <field name='lease_amount'/>
+                            <field name='rent_amount'/>
+                        </group>
+
+                        <group>
+                            <field name='can_be_sold'/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <group>
+                                <field name="description"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+
+        </field>
+    </record>
+        <record id="property_filter" model="ir.ui.view">
+            <field name="name">Properties_Sellable</field>
+            <field name="model">properties.management</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter name="can_be_sold" string="Can be sold ?"
+                            domain="[('can_be_sold', '!=', False)]"/>
+                    <filter string="Archived"
+                        domain="[('active','=',False)]"
+                        name="Archive"/>
+                    <group name="groupby">
+                       <filter name="group_by_country" string="Country"
+                               context="{'group_by': 'country_id'}"/>
+                    </group>
+                    <group name="groupby">
+                       <filter name="group_by_state" string="State"
+                               context="{'group_by': 'state_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+</odoo>

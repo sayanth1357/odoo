@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="wizard_property_report_xlsx_views" model="ir.ui.view">
+        <field name="name">"wizard.property.xlsx.report.views"</field>
+        <field name="model">property.report.xlsx</field>
+        <field name="arch" type="xml">
+            <form string="Property Report">
+                   <sheet>
+                       <group>
+                           <group>
+                                <field name="property_id"/>
+                           </group>
+                           <group>
+                                <field name="property_name"/>
+                                <field name="Owner_id"/>
+                           </group>
+                       </group>
+                       <hr></hr>
+                       <group>
+                                   <field name="tenant_id"/>
+                       </group>
+                       <group>
+
+                               <group>
+                                   <field name="from_date"/>
+                               </group>
+                               <group>
+                                   <field name="to_date"/>
+                               </group>
+                               <group>
+                                   <field name="state_type"/>
+                               </group>
+                               <group>
+                                   <field name="state"/>
+                               </group>
+                       </group>
+                           <footer>
+                                <button name="action_print_xlsx"
+                                class="oe_highlight"
+                                type="object"
+                                string="XLSX Print"
+                                />
+                           </footer>
+                   </sheet>
+               </form>
+        </field>
+    </record>
+
+
+</odoo>

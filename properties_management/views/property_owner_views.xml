@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="views_property_owner_list_inherit" model="ir.ui.view">
+        <field name="name">res.partner.list.views.inherit.property</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <field name="email" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
+            <field name="phone" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
+            <field name="activity_ids" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
+            <field name="country_id" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
+            <field name="application_statistics" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="views_property_owner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.views.inherit.property</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='contact_addresses']" position="before">
+                <page name="Property Records">
+                    <group>
+                        <field name='owner_ids' readonly="True">
+                           <list>
+                               <field name="property_id"/>
+                               <field name="state"/>
+                               <field name="state_type"/>
+                           </list>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

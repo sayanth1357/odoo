@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="rental_leased_list_views" model="ir.ui.view">
+        <field name="name">Rental/Leased Properties</field>
+        <field name="model">rent.lease.record</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="property_id"/>
+                <field name="property_name"/>
+                <field name="state_type"/>
+                <field name="lease_amount" invisible=" state_type!='Lease'"/>
+                <field name="rental_amount" invisible="state_type !='Rent'"/>
+                <field name="from_date"  />
+                <field name="to_date"  />
+                <field name="days"/>
+                <field name="total_amount"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>
