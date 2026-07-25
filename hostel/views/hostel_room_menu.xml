@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <menuitem id="hostel_root_menu" name="Hostel"/>
+
+    <menuitem id="hostel_room_menu_rooms" parent="hostel_root_menu" sequence="0"
+              name="Rooms"/>
+
+    <menuitem id="hostel_room_menu" parent="hostel_room_menu_rooms" sequence="0"
+              action="hostel_room_action" groups="group_student,group_warden"/>
+    <menuitem id="hostel_facilities_menu" parent="hostel_room_menu_rooms"
+              sequence="1" action="hostel_facilities_action"
+              groups="group_warden"/>
+    <menuitem id="cleaning_service_menu" parent="hostel_room_menu_rooms"
+              sequence="2" action="cleaning_service_action"/>
+
+    <menuitem id="hostel_room_menu_student_student" parent="hostel_root_menu"
+              sequence="1" name="Students"/>
+
+    <menuitem id="student_student_menu"
+              parent="hostel_room_menu_student_student" sequence="0"
+              action="student_student_action"/>
+    <menuitem id="leave_request_menu" parent="hostel_room_menu_student_student"
+              sequence="1" action="leave_request_action"/>
+    <menuitem id="hostel_room_reporting_menu" parent="hostel_root_menu" sequence="2"
+              name="Reporting"/>
+    <menuitem id="student_reporting_menu" name="Student Report" parent="hostel_room_reporting_menu" sequence="0" action="action_student_student_report1"/>
+    <menuitem id="leave_request_reporting_menu" name="Leave Request Report" parent="hostel_room_reporting_menu" sequence="1" action="action_leave_request_report"/>
+
+    <menuitem id="hostel_first_level_configuration" parent="hostel_root_menu"
+              sequence="3" name="Configuration"/>
+
+    <menuitem id="hostel_room_type_menu"
+              parent="hostel_first_level_configuration" sequence="0"
+              action="hostel_room_type_action"/>
+</odoo>

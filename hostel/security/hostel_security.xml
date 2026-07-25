@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="hostel_room_comp_rule" model="ir.rule">
+            <field name="name">Rooms Multi-Company</field>
+            <field name="model_id" ref="model_hostel_room"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+        <record id="account_move_comp_rule" model="ir.rule">
+            <field name="name">Invoices Multi-Company</field>
+            <field name="model_id" ref="model_account_move"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+        <record id="cleaning_service_comp_rule" model="ir.rule">
+            <field name="name">Cleaning Service Multi-Company</field>
+            <field name="model_id" ref="model_cleaning_service"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+        <record id="student_student_comp_rule" model="ir.rule">
+            <field name="name">Students Multi-Company</field>
+            <field name="model_id" ref="model_student_student"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+        <record id="hostel_facilities_comp_rule" model="ir.rule">
+            <field name="name">Hostel Facilities Multi-Company</field>
+            <field name="model_id" ref="model_hostel_facilities"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+    </data>
+</odoo>

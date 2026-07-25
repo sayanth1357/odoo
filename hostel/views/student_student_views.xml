@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="student_student_view_form" model="ir.ui.view">
+        <field name="name">student.student.form</field>
+        <field name="model">student.student</field>
+        <field name="arch" type="xml">
+            <form string="student_student_form">
+                <header>
+                    <button name="student_action_alot_room"
+                            type="object" class="btn-primary"
+                            string="Alot Room" invisible="room_id"
+                            groups="hostel.group_warden"/>
+                    <button name="student_action_vacate_room" string="Vacate"
+                            type="object" class="btn-primary"
+                            invisible="not room_id"
+                            groups="hostel.group_warden"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived"
+                            bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice" type="object"
+                                class="oe_stat_button" icon="fa-pencil-square-o"
+                                invisible="invoice_count == 0">
+                            <field name="invoice_count" widget="statinfo"
+                                   string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="mb8">
+                        <div class="d-flex gap-3">
+                            <field name="image" widget="contact_image"/>
+                            <div class="d-flex flex-column flex-grow-1">
+                                <h1 class="mb-0 w-md-75">
+                                    <field name="name" placeholder="Name"
+                                           nolabel="1"/>
+                                </h1>
+                                <div class="d-flex align-items-baseline w-md-50">
+                                    <i class="fa fa-fw me-1 fa-envelope text-primary"
+                                       title="Email"/>
+                                    <field name="email" class="w-100"
+                                           widget="email" placeholder="Email "/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="student_id"/>
+                            <field name="partner_id" readonly="True"/>
+                            <field name="room_id"/>
+                            <field name="company_id"/>
+                            <field name="invoice_status"
+                                   invisible=""/>
+                        </group>
+                        <group>
+                            <field name="dob" options="{'max_date':'today'}"/>
+                            <field name="user_id"/>
+                            <field name="age"/>
+                            <field name="monthly_payment"/>
+                            <field name="receive_email"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Other Info">
+                            <group string="Address">
+                                <group>
+                                    <field name="street"/>
+                                    <field name="city"/>
+                                    <field name="zip"/>
+                                </group>
+                                <group>
+                                    <field name="street2"/>
+                                    <field name="state_id"/>
+                                    <field name="country_id"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="student_student_view_list" model="ir.ui.view">
+        <field name="name">student.student.list</field>
+        <field name="model">student.student</field>
+        <field name="arch" type="xml">
+            <list string="Students list">
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="room_id"/>
+                <field name="email"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="student_student_search" model="ir.ui.view">
+        <field name="name">student.student.search</field>
+        <field name="model">student.student</field>
+        <field name="arch" type="xml">
+            <search string="Student Search">
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="street"/>
+                <field name="street2"/>
+                <field name="student_id"/>
+                <field name="city"/>
+                <field name="country_id"/>
+                <field name="state_id"/>
+                <field name="company_id"/>
+                <filter name="archived" string="Archived"
+                        domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_by_room" string="Room"
+                            context="{'group_by':'room_id'}"/>
+                    <filter name="group_by_invoice_status"
+                            string="Invoice Status"
+                            context="{'group_by':'invoice_status'}"/>
+                    <filter name="group_by_company" string="Company"
+                            context="{'group_by':'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="student_student_action" model="ir.actions.act_window">
+        <field name="name">Students</field>
+        <field name="res_model">student.student</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

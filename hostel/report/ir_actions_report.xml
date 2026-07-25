@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="action_report_hostel_room" model="ir.actions.report">
+            <field name="name">Hostel Room report</field>
+            <field name="model">hostel.room</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">hostel.report_hostel_rooms</field>
+            <field name="report_file">hostel.report_hostel_rooms</field>
+            <field name="print_report_name">'%s-report' % (object.room_no)</field>
+            <field name="binding_model_id" ref="model_hostel_room"/>
+            <field name="binding_type">report</field>
+        </record>
+         <record id="action_report_students1" model="ir.actions.report">
+            <field name="name">Student Report </field>
+            <field name="model">student.student.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">hostel.report_student_student</field>
+            <field name="report_file">hostel.report_student_student</field>
+            <field name="print_report_name">'Student Report - %s' % (object._set_filename())</field>
+            <field name="binding_model_id" ref="model_student_student_report"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_student_reports2" model="ir.actions.report">
+            <field name="name">Student Report - Via action button </field>
+            <field name="model">student.student</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">hostel.report_student_student_action</field>
+            <field name="report_file">hostel.report_student_student_action</field>
+            <field name="print_report_name">'Student Report - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_student_student"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_leave_request" model="ir.actions.report">
+            <field name="name">Leave Request Report</field>
+            <field name="model">leave.request.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">hostel.report_leave_request</field>
+            <field name="report_file">hostel.report_leave_request</field>
+            <field name="print_report_name">'Leave Request Report %s' % (object._set_filename())</field>
+            <field name="binding_model_id" ref="model_leave_request_report"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+<!--        REGISTRATION FORM TEMPLATE-->
+        <template id="student_registration_form" name="Student Registration Form" >
+            <t t-call="website.layout">
+                <section style="background-color:#714B67; color:white;" class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24">
+                  <div class="container">
+                      <h1>Student Registration </h1>
+                  </div>
+                </section>
+                <section class="s_text_block pt40 pb40 o_colored_level ">
+                    <div class="container s_allow_columns">
+                        <div class="row">
+                            <div class="col-lg-7 mt-4 mt-lg-0" >
+                                    <form action="/website/student/form/submit" method="post" class="student_registration_form" style="border-radius: 5px; padding: 20px;" enctype="multipart/form-data">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div class="oe_structure" align="center">
+                                            <label for="autofill_info">Autofill Current User Info</label>
+                                            <input type="checkbox" id="autofill_info" name="autofill_info"/>
+                                        </div>
+                                           <div class="s_website_form_rows row s_col_no_bgcolor">
+                                               <div  class="mb-3 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" style="width=70%">
+                                                <label for="name" style="padding: 5px;" align="left">Name</label>
+                                                <input type="text" name="name" required="1" width="100%" class="form-control s_website_form_input"/>
+                                            </div>
+                                            <div class="mb-3 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required">
+                                                <label for="email" style="padding: 5px;" class="s_website_form_label_content">Email</label>
+                                                <input type="email" name="email" required="1" class="form-control s_website_form_input"/>
+                                            </div>
+                                            <div  class="mb-3 col-lg-6 s_website_form_field s_website_form_custom" style="width=70%">
+                                                <label for="dob" style="padding: 5px;" class="s_website_form_label_content">DOB</label>
+                                                <input type="date" name="dob" required="1" style="width=100%"  class="form-control s_website_form_input"/>
+                                            </div>
+                                            <div class="mb-3 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required">
+                                                <label for="image" style="padding: 5px;" class="s_website_form_label_content">Image</label>
+                                                <input type="file" name="image" class="form-control s_website_form_input" accept="image/png, image/jpeg"/>
+                                            </div>
+                                            <div class="mb-3 col-lg-6 s_website_form_field s_website_form_custom">
+                                                <t t-if="bool(docs)">
+                                                    <label for="rooms" style="padding: 5px;">Room</label>
+                                                    <select name="rooms"  id="rooms" class="rooms_select_onchange form-control s_website_form_input" width="100%">
+                                                        <option value="" selected="1" disabled="1" hidden="1" class="rooms_select_onchange form-control s_website_form_input">Choose here</option>
+                                                        <t t-foreach="docs" t-as="room">
+                                                            <option t-att-value="room.id" t-out="room.room_no"></option>
+                                                        </t>
+                                                    </select>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color:#FF0000;">No rooms available.</span>
+                                                </t>
+                                            </div>
+                                            <div class="room_details" hidden="1" >
+                                                <div class="mb-3 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required">
+                                                        <label for="room_type" style="padding: 5px;">Type</label>
+                                                        <input type="text" name="room_type" readonly="1" class="form-control s_website_form_input"/>
+                                                </div>
+                                                <div class="room_facilities" hidden="1" >
+                                                        <label for="facilities" style="padding: 5px;">Facilities</label>
+                                                        <input type="text" name="facilities" readonly="1" class="form-control s_website_form_input"/>
+                                                </div>
+                                                <div >
+                                                        <label for="rent" style="padding: 5px;">Rent</label>
+                                                        <input type="number" name="rent" readonly="1" class="form-control s_website_form_input"/>
+                                                </div>
+                                                <div>
+                                                        <label for="total_rent" style="padding: 5px;">Total</label>
+                                                        <input type="number" name="total_rent" readonly="1" class="form-control s_website_form_input"/>
+                                                </div>
+                                            </div>
+                                           </div>
+
+                                        <div align="center" style="padding: 5px;">
+                                            <button type="submit" class="btn btn-primary s_website_form_send">Submit</button>
+                                        </div>
+                                </form>
+                            </div>
+                            <div class="col-lg-4 offset-lg-1 mt-4 mt-lg-0">
+                                <h5>My Hostel</h5>
+                                <p>Student Registration form.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </t>
+        </template>
+
+        <template id="registration_success" name="Student Registration Success">
+            <t t-call="website.layout">
+                <section class="d-flex align-items-center justify-content-center vh-100" style="background-color: #f8f9fa;">
+                    <div class="text-center">
+                        <h3 class="text-success mb-3">Student Registered Successfully!</h3>
+                        <a href="/website/student/register/form" class="btn btn-primary rounded-3">Add Another Student</a>
+                    </div>
+                </section>
+            </t>
+        </template>
+
+        <record id="registration_form_menu" model="website.menu">
+            <field name="name">Register Student</field>
+            <field name="url">/website/student/register/form</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">90</field>
+<!--            <field name="group_ids" eval="[(4,ref('base.group_portal'))]"/>-->
+        </record>
+    </data>
+</odoo>

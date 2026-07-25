@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="type_1" model="hostel.room.type">
+            <field name="name">Dormitory</field>
+        </record>
+        <record id="type_2" model="hostel.room.type">
+            <field name="name">Capsule Dorms</field>
+        </record>
+        <record id="type_3" model="hostel.room.type">
+            <field name="name">Private Rooms</field>
+        </record>
+    </data>
+</odoo>

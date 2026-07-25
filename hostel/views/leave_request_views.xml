@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="leave_request_view_form" model="ir.ui.view">
+        <field name="name">leave.request.form</field>
+        <field name="model">leave.request</field>
+        <field name="arch" type="xml">
+            <form string="Leave Request form" >
+                <header>
+                    <button name="action_submit_request" string="Submit" type="object" groups="hostel.group_student" invisible="status != 'new'" class="btn-primary"/>
+                    <button name="action_reject_request" string="Reject" type="object" groups="hostel.group_warden" invisible="status  in ['new','approved','rejected']" class="btn-primary"/>
+                    <button name="action_approve_leave" type="object"
+                            string="Approve" class="btn-primary"
+                            invisible="status in ['approved','rejected']"
+                            groups="hostel.group_warden"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="student_id" readonly="status not in ['new']"/>
+                        <field name="leave_date" readonly="status not in ['new']" options="{'min_date':(context_today() + relativedelta(days=1)).strftime('%Y-%m-%d')}"/>
+                        <field name="arrival_date" readonly="status not in ['new']" options="{'min_date':(context_today() + relativedelta(days=1)).strftime('%Y-%m-%d')}"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="leave_request_view_list" model="ir.ui.view">
+        <field name="name">leave.request.list</field>
+        <field name="model">leave.request</field>
+        <field name="arch" type="xml">
+            <list string="Leave Request list">
+                <field name="student_id"/>
+                <field name="leave_date"/>
+                <field name="arrival_date"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+    <record id="leave_request_view_search" model="ir.ui.view">
+        <field name="name">leave.request.search</field>
+        <field name="model">leave.request</field>
+        <field name="arch" type="xml">
+            <search string="Leave request Search">
+                <field name="student_id"/>
+                <field name="status"/>
+                <separator/>
+                <filter name="submitted" string="Submitted" domain="[('status','=','submitted')]"/>
+                <filter name="approved" string="Approved" domain="[('status','=','approved')]"/>
+                <group>
+                    <filter name="group_by_student_id" string="Student"
+                            context="{'group_by':'student_id'}"/>
+                    <filter name="group_by_status" string="Status"
+                            context="{'group_by':'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="leave_request_action" model="ir.actions.act_window">
+        <field name="name">Leave Requests</field>
+        <field name="res_model">leave.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

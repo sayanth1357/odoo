@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="demo_hostel_facilities_1" model="hostel.facilities">
+            <field name="name">Fridge</field>
+            <field name="charge">250</field>
+        </record>
+        <record id="demo_hostel_facilities_2" model="hostel.facilities">
+            <field name="name">Grinder</field>
+            <field name="charge">200</field>
+        </record>
+        <record id="demo_hostel_facilities_3" model="hostel.facilities">
+            <field name="name">Oven</field>
+            <field name="charge">500</field>
+        </record>
+    </data>
+</odoo>

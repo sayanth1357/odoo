@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="hostel_room_details">
+            <t t-call="website.layout">
+                <main>
+                    <div class="container" >
+                        <div class="row">
+                            <h1 t-out="room.room_no"></h1>
+                            <h5><span t-out="room.room_type_id.name"></span></h5><br/><br/>
+                            <div class="col-sm-6">
+                                <p><span>Status : </span><span t-out="room.state"></span></p>
+                                <p><span>Bed Count : </span><span t-out="room.no_of_beds"></span></p>
+                                <p><span>Company : </span><span t-out="room.company_id.name"></span></p>
+                                <p><span>Total rent : </span><span t-out="room.total_rent"></span></p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p><span>Rent : </span><span t-out="room.rent"></span></p>
+                                <t t-if="room.facilities_ids">
+                                    <div>
+                                        <div style="background-color:#E0E0E0;">
+                                            <h6 style="padding:5px;">Facilties</h6>
+                                        </div>
+                                        <div style="background-color:#F0F0F0;">
+                                            <t t-foreach="room.facilities_ids" t-as="facility">
+                                                <p><span t-out="facility.name"></span>  (Charge = <span t-out="facility.charge"></span>)</p>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <t t-if="images">
+                    <div align="center" style="background-color:#F0F0F0;">
+                        <p style="background-color:#E0E0E0;font-size:19px;">Gallery</p>
+                        <div class="">
+                            <t t-foreach="images" t-as="image">
+                                <img t-att-src="image_data_uri((image.datas))" class="" alt="Room Image" loading="lazy" width="400px" height="400px"/>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

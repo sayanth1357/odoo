@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="hostel_view_form" model="ir.ui.view">
+        <field name="name">hostel.room.form</field>
+        <field name="model">hostel.room</field>
+        <field name="arch" type="xml">
+            <form string="hostel_room">
+                <header>
+                    <field name="state" widget="statusbar"
+                           options="{'clickable':True}"/>
+                </header>
+
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="invoice_count == 0">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <h1>
+                            <field name="room_no" placeholder="Room No"  />
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="room_type_id"/>
+                            <field name="facilities_ids" widget="many2many_tags"/>
+                            <field name="company_id" />
+                            <field name="currency_id" />
+                        </group>
+                        <group>
+                            <field name="no_of_beds"/>
+                            <field name="rent"/>
+                            <field name="total_rent"/>
+                            <field name="pending_amount"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Students" name="students" editable="False" create="False">
+                            <field name="student_ids">
+                                <list delete="False" no_open="1" create="False">
+                                    <field name="name" readonly="True"/>
+                                    <field name="student_id"
+                                           string="Student ID"/>
+                                    <field name="room_id"/>
+                                    <field name="email" readonly="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Gallery">
+                            <field name="image" widget="image" class="img-thumbnail"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_view_list" model="ir.ui.view">
+        <field name="name">hostel.room.list</field>
+        <field name="model">hostel.room</field>
+        <field name="arch" type="xml">
+            <list string="hostel_room">
+                <field name="room_no"/>
+                <field name="room_type_id"/>
+                <field name="facilities_ids" widget="many2many_tags"/>
+                <field name="no_of_beds"/>
+                <field name="rent"/>
+                <field name="total_rent"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hostel_view_search" model="ir.ui.view">
+        <field name="name">hostel.room.search</field>
+        <field name="model">hostel.room</field>
+        <field name="arch" type="xml">
+            <search string="Hostel Search">
+                <field name="room_no"/>
+                <field name="no_of_beds"/>
+                <field name="rent"/>
+                <field name="state"/>
+                <field name="company_id"/>
+                <field name="facilities_ids"/>
+                <field name="total_rent"/>
+                <separator string="Separate"/>
+                <filter string="Available" name="filter_available"
+                        domain="[('state','!=','full'),
+                        ('no_of_beds','!=',0)]"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="No of beds" name="group_by_no_of_beds"
+                        context="{'group_by':'no_of_beds'}"/>
+                    <filter string="State" name="group_by_state"
+                        context="{'group_by':'state'}"/>
+                    <filter string="Facilities" name="group_by_facilities_ids"
+                        context="{'group_by':'facilities_ids'}"/>
+                    <filter string="Company" name="group_by_company"
+                        context="{'group_by':'company_id'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+    <record id="hostel_room_action" model="ir.actions.act_window">
+        <field name="name">Rooms</field>
+        <field name="res_model">hostel.room</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_available': 1}</field>
+    </record>
+</odoo>

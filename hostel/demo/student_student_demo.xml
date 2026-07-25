@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="students_1" model="student.student">
+            <field name="image" type="base64" file="hostel/static/img/ayush_image.jpg"/>
+            <field name="name" >Ayush</field>
+            <field name="email">ayush@gmail.com</field>
+            <field name="dob" eval="'2000-02-02'"/>
+            <field name="room_id" eval="ref('hostel.room_1')"/>
+            <field name="street">street1</field>
+            <field name="street2">street1.1</field>
+            <field name="city">City A</field>
+            <field name="zip">678901</field>
+        </record>
+        <record id="students_2" model="student.student">
+            <field name="image" type="base64" file="hostel/static/img/ayush_image.jpg"/>
+            <field name="name" >Akshay</field>
+            <field name="email">akshay@gmail.com</field>
+            <field name="dob" eval="'2001-02-02'"/>
+            <field name="room_id" eval="ref('hostel.room_2')"/>
+            <field name="street">street1</field>
+            <field name="street2">street1.1</field>
+            <field name="city">City A</field>
+            <field name="zip">678901</field>
+        </record>
+    </data>
+</odoo>

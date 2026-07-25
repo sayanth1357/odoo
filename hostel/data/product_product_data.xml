@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="rent_product" model="product.product">
+            <field name="name">Rent</field>
+            <field name="list_price">0</field>
+            <field name="standard_price">0</field>
+            <field name="type">service</field>
+        </record>
+    </data>
+
+</odoo>

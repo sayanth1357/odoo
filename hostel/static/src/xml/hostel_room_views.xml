@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--    dynamic template-->
+<templates xml:space="preserve">
+    <t t-name="hostel.category_hostel_room_data">
+        <section class="categories_section">
+            <div class="container">
+                <h3 class="section_heading">Hostel Rooms</h3>
+                <t t-set="unique_key" t-value="(new Date()).getMilliseconds()"/>
+                <div t-attf-id="course_carousel#{unique_key}" class="container carousel slide" data-bs-ride="carousel" t-att-data-bs-interval="interval">
+                    <div class="carousel-inner row w-100 mx-auto" role="listbox">
+                        <t t-foreach="chunkData" t-as="room_chunk" t-key="room_chunk_index">
+                            <div t-att-class="room_chunk.is_active ? 'carousel-item active' : 'carousel-item'">
+                                <div class="row">
+                                    <t t-foreach="room_chunk" t-as="room" t-key="room.id">
+                                        <div class="block span3 col-3">
+                                            <div class="card-group">
+                                                <div class="card">
+                                                    <img t-attf-src="data:image/png;base64,#{room.image}" class="card-img-top" alt="Room Image" style="padding: 0px; margin: 0px; height: 160px; width:305px;"/>
+                                                    <h5 class="mb-0"><t t-esc="room.room_no"/></h5>
+                                                    <a t-attf-href="/room/details/#{room.id}" class="btn btn-primary">Details</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                            <a t-attf-href="#course_carousel#{unique_key}" class="carousel-control-prev" data-bs-slide="prev" role="button" aria-label="Previous" title="Previous">
+                                <span class="fa fa-chevron-circle-left fa-2x"/>
+                                <span class="visually-hidden">Previous</span>
+                            </a>
+                             <a t-attf-href="#course_carousel#{unique_key}" class="carousel-control-next" data-bs-slide="next" role="button" aria-label="Next" title="Next">
+                                 <span class="fa fa-chevron-circle-right fa-2x"/>
+                                 <span class="visually-hidden">Next</span>
+                             </a>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t>
+</templates>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="0">
+        <record id="hostel_room_comp_rule" model="ir.rule">
+            <field name="name">Rooms Multi-Company</field>
+            <field name="model_id" ref="model_hostel_room"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+        <record id="account_move_comp_rule" model="ir.rule">
+            <field name="name">Invoices Multi-Company</field>
+            <field name="model_id" ref="model_account_move"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+        <record id="cleaning_service_comp_rule" model="ir.rule">
+            <field name="name">Cleaning Service Multi-Company</field>
+            <field name="model_id" ref="model_cleaning_service"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+        <record id="student_student_comp_rule" model="ir.rule">
+            <field name="name">Students Multi-Company</field>
+            <field name="model_id" ref="model_student_student"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+        <record id="hostel_facilities_comp_rule" model="ir.rule">
+            <field name="name">Hostel Facilities Multi-Company</field>
+            <field name="model_id" ref="model_hostel_facilities"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        </record>
+        <record id="student_record_rule_user" model="ir.rule">
+            <field name="name">Record role - Student/Student</field>
+            <field name="model_id" ref="model_student_student"/>
+            <field name="domain_force">[('user_id.id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('hostel.group_student'))]"/>
+        </record>
+        <record id="room_record_rule_user" model="ir.rule">
+            <field name="name">Record role - Room/student</field>
+            <field name="model_id" ref="model_hostel_room"/>
+            <field name="domain_force">[('id','=',user.student_id.room_id.id)]</field>
+            <field name="groups" eval="[(4,ref('hostel.group_student'))]"/>
+        </record>
+        <record id="leave_request_record_rule_user" model="ir.rule">
+            <field name="name">Record role - Leave Request</field>
+            <field name="model_id" ref="model_leave_request"/>
+            <field name="domain_force">[('student_id','=',user.student_id)]</field>
+            <field name="groups" eval="[(4,ref('hostel.group_student'))]"/>
+        </record>
+        <record id="cleaning_service_record_rule_user" model="ir.rule">
+            <field name="name">record rule - Staff: Cleaning service read only/Staff</field>
+            <field name="model_id" ref="model_cleaning_service"/>
+            <field name="domain_force">['|',('cleaning_staff','=',False),('cleaning_staff','=',user)]</field>
+            <field name="groups" eval="[(4,ref('hostel.group_staff'))]"/>
+        </record>
+        <record id="leave_request_record_rule_warden" model="ir.rule">
+            <field name="name">Record rule - Leave Request/Warden</field>
+            <field name="model_id" ref="model_leave_request"/>
+            <field name="domain_force">[('status','!=','new')]</field>
+            <field name="groups" eval="[(4,ref('hostel.group_warden'))]"/>
+        </record>
+
+    </data>
+</odoo>

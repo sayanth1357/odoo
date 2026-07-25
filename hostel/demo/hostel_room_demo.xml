@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="room_1" model="hostel.room">
+            <field name="room_type_id" ref="hostel.type_1"/>
+            <field name="no_of_beds" eval="2"/>
+            <field name="rent" eval="2000"/>
+            <field name="facilities_ids" eval="[(4,ref('hostel.demo_hostel_facilities_1'))]"/>
+        </record>
+
+        <record id="room_2" model="hostel.room">
+            <field name="room_type_id" ref="hostel.type_2"/>
+            <field name="no_of_beds" eval="2"/>
+            <field name="rent" eval="2000"/>
+            <field name="facilities_ids" eval="[(4,ref('hostel.demo_hostel_facilities_1')),(4,ref('hostel.demo_hostel_facilities_2'))]"/>
+        </record>
+        <record id="room_3" model="hostel.room">
+            <field name="room_type_id" ref="hostel.type_3"/>
+            <field name="no_of_beds" eval="1"/>
+            <field name="rent" eval="2000"/>
+            <field name="facilities_ids" eval="[(4,ref('hostel.demo_hostel_facilities_1')),(4,ref('hostel.demo_hostel_facilities_2')),(4,ref('hostel.demo_hostel_facilities_3'))]"/>
+        </record>
+
+    </data>
+</odoo>
